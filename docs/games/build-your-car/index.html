@@ -184,11 +184,8 @@
                     document.getElementById('celebration').classList.remove('hidden');
                     return;
                 }
-                // delay showQuestion until unlock notice disappears (2.5s)
-                setTimeout(() => showQuestion(), 2600);
-            } else {
-                showQuestion();
             }
+            showQuestion();
         }
 
         // Play a short success chime using the WebAudio API (no external files needed)
@@ -285,9 +282,18 @@
             setTimeout(()=> { s.classList.remove('visible'); setTimeout(()=> s.remove(), 400); }, 1200);
         }
         function showUnlockNotice(partName, remainingParts=[]) {
-            const msg = document.createElement('div'); msg.className='unlock-notice'; msg.innerHTML = '<strong>Hurray!</strong> You found the <em>'+partName+'</em>!<br/>' + (remainingParts.length ? 'Now you still need to find: ' + remainingParts.join(', ') : 'You found them all!');
-            document.body.appendChild(msg); requestAnimationFrame(()=> msg.classList.add('visible'));
-            setTimeout(()=> { msg.classList.remove('visible'); setTimeout(()=> msg.remove(), 2500); }, 2500);
+            const msg = document.createElement('div');
+            msg.className = 'unlock-notice';
+            msg.textContent = 'Hurray! You found the ' + partName + ' part!';
+            if (remainingParts.length) {
+                msg.textContent += ' Still need: ' + remainingParts.join(', ');
+            }
+            document.body.appendChild(msg);
+            requestAnimationFrame(() => msg.classList.add('visible'));
+            setTimeout(() => {
+                msg.classList.remove('visible');
+                setTimeout(() => msg.remove(), 350);
+            }, 2500);
         }
         
         // One-time resume of AudioContext on first user gesture to ensure sounds play

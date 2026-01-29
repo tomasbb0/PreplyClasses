@@ -42,7 +42,7 @@
         .failure-splash.visible { opacity:1; transform: translateX(-50%) translateY(0) scale(1.05); }
 
         /* Unlock notice */
-        .unlock-notice { position: fixed; left:50%; top:12%; transform: translateX(-50%) translateY(-12px); background: #111827; color: white; padding: 14px 20px; border-radius: 12px; z-index: 210; opacity:0; transition: all .35s; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .unlock-notice { position: fixed; left:50%; top:12%; transform: translateX(-50%) translateY(-12px); background: #111827; color: white; padding: 14px 20px; border-radius: 12px; z-index: 210; opacity:0; transition: all .35s; box-shadow: 0 10px 30px rgba(0,0,0,0.3); pointer-events: none; }
         .unlock-notice.visible { opacity:1; transform: translateX(-50%) translateY(0) scale(1.02); }
         .play-btn { background: #4F46E5; color: white; border: none; padding: 16px 48px; font-size: 1.2rem; font-weight: 700; border-radius: 12px; cursor: pointer; font-family: inherit; margin-top: 16px; }
         .play-btn:hover { background: #4338CA; }
@@ -192,11 +192,8 @@
                     document.getElementById('celebration').classList.remove('hidden');
                     return;
                 }
-                // delay showQuestion until unlock notice disappears (2.5s)
-                setTimeout(() => showQuestion(), 2600);
-            } else {
-                showQuestion();
             }
+            showQuestion();
         }
 
         // Play a short success chime using the WebAudio API (no external files needed)
@@ -293,9 +290,18 @@
             setTimeout(()=> { s.classList.remove('visible'); setTimeout(()=> s.remove(), 400); }, 1200);
         }
         function showUnlockNotice(partName, remainingParts=[]) {
-            const msg = document.createElement('div'); msg.className='unlock-notice'; msg.innerHTML = '<strong>Hurray!</strong> You found the <em>'+partName+'</em>!<br/>' + (remainingParts.length ? 'Now you still need to find: ' + remainingParts.join(', ') : 'You found them all!');
-            document.body.appendChild(msg); requestAnimationFrame(()=> msg.classList.add('visible'));
-            setTimeout(()=> { msg.classList.remove('visible'); setTimeout(()=> msg.remove(), 2500); }, 2500);
+            const msg = document.createElement('div');
+            msg.className = 'unlock-notice';
+            msg.textContent = 'Hurray! You found the ' + partName + ' part!';
+            if (remainingParts.length) {
+                msg.textContent += ' Still need: ' + remainingParts.join(', ');
+            }
+            document.body.appendChild(msg);
+            requestAnimationFrame(() => msg.classList.add('visible'));
+            setTimeout(() => {
+                msg.classList.remove('visible');
+                setTimeout(() => msg.remove(), 350);
+            }, 2500);
         }
         
         // One-time resume of AudioContext on first user gesture to ensure sounds play

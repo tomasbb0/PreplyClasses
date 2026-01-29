@@ -175,10 +175,8 @@
                     document.getElementById('celebration').classList.remove('hidden');
                     return;
                 }
-                setTimeout(() => showQuestion(), 2600);
-            } else {
-                showQuestion();
             }
+            showQuestion();
         }
 
         // Play a short success chime using the WebAudio API (no external files needed)

@@ -189,10 +189,8 @@
                     document.getElementById('celebration').classList.remove('hidden');
                     return;
                 }
-                setTimeout(() => showQuestion(), 2600);
-            } else {
-                showQuestion();
             }
+            showQuestion();
         }
         
         showQuestion();
@@ -203,7 +201,7 @@
         function playOhSound() { const ctx=getAudioContext(); if(!ctx) return; if(ctx.state==='suspended'&&typeof ctx.resume==='function'){ctx.resume().catch(()=>{});} const now=ctx.currentTime; const o=ctx.createOscillator(); const g=ctx.createGain(); o.type='sine'; o.frequency.setValueAtTime(350,now); o.frequency.exponentialRampToValueAtTime(150,now+0.5); g.gain.setValueAtTime(0.0001,now); g.gain.exponentialRampToValueAtTime(0.3,now+0.05); g.gain.exponentialRampToValueAtTime(0.0001,now+0.7); o.connect(g); g.connect(ctx.destination); o.start(now); o.stop(now+0.7);}
         function playPling() { const ctx=getAudioContext(); if(!ctx) return; const now=ctx.currentTime; const o=ctx.createOscillator(); const g=ctx.createGain(); o.type='triangle'; o.frequency.setValueAtTime(1320, now); o.frequency.exponentialRampToValueAtTime(660, now+0.12); g.gain.setValueAtTime(0.0001, now); g.gain.exponentialRampToValueAtTime(0.25, now+0.01); g.gain.exponentialRampToValueAtTime(0.0001, now+0.3); o.connect(g); g.connect(ctx.destination); o.start(now); o.stop(now+0.28); }
         function showFailureSplash(text='Ohhhh...') { const s=document.createElement('div'); s.className='failure-splash'; s.textContent=text; document.body.appendChild(s); requestAnimationFrame(()=>s.classList.add('visible')); setTimeout(()=>{ s.classList.remove('visible'); setTimeout(()=>s.remove(),400); },1200); }
-        function showUnlockNotice(partName, remainingParts=[]) { const msg=document.createElement('div'); msg.className='unlock-notice'; msg.innerHTML='<strong>Hurray!</strong> You found the <em>'+partName+'</em>!<br/>' + (remainingParts.length ? 'Now you still need to find: ' + remainingParts.join(', ') : 'You found them all!'); document.body.appendChild(msg); requestAnimationFrame(()=>msg.classList.add('visible')); setTimeout(()=>{ msg.classList.remove('visible'); setTimeout(()=>msg.remove(),2500); },2500); }
+        function showUnlockNotice(partName, remainingParts=[]) { const msg = document.createElement('div'); msg.className = 'unlock-notice'; msg.textContent = 'Hurray! You found the ' + partName + ' part!'; if (remainingParts.length) { msg.textContent += ' Still need: ' + remainingParts.join(', '); } document.body.appendChild(msg); requestAnimationFrame(() => msg.classList.add('visible')); setTimeout(() => { msg.classList.remove('visible'); setTimeout(() => msg.remove(), 350); }, 2500); }
     </script>
 </body>
 </html>
