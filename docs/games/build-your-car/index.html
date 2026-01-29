@@ -184,8 +184,11 @@
                     document.getElementById('celebration').classList.remove('hidden');
                     return;
                 }
+                // delay showQuestion until unlock notice disappears (2.5s)
+                setTimeout(() => showQuestion(), 2600);
+            } else {
+                showQuestion();
             }
-            showQuestion();
         }
 
         // Play a short success chime using the WebAudio API (no external files needed)
