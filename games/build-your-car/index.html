@@ -274,6 +274,18 @@
             document.body.appendChild(msg); requestAnimationFrame(()=> msg.classList.add('visible'));
             setTimeout(()=> { msg.classList.remove('visible'); setTimeout(()=> msg.remove(), 2500); }, 2500);
         }
+        
+        // One-time resume of AudioContext on first user gesture to ensure sounds play
+        (function initAudioOnGesture(){
+            const handler = () => {
+                try {
+                    const ctx = getAudioContext();
+                    if (ctx && ctx.state === 'suspended' && typeof ctx.resume === 'function') ctx.resume().catch(()=>{});
+                } catch(e) {}
+                document.removeEventListener('pointerdown', handler);
+            };
+            document.addEventListener('pointerdown', handler, {passive:true});
+        })();
     </script>
 </body>
 </html>
