@@ -162,12 +162,16 @@
             
             if (selected === correct) {
                 btn.classList.add('correct');
+                playCheerSound();
+                showSuccessSplash('Parabéns! 🎉');
                 setTimeout(() => nextQuestion(), 800);
             } else {
                 btn.classList.add('wrong');
+                playOhSound();
                 stars = Math.max(0, stars - 1);
                 document.getElementById('stars').textContent = '⭐'.repeat(stars) + '☆'.repeat(5 - stars);
                 btns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
+                showFailureSplash('Ohhhh...');
                 setTimeout(() => nextQuestion(), 1500);
             }
         }

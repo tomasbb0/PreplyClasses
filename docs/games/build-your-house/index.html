@@ -160,12 +160,12 @@
             
             if (selected === correct) {
                 btn.classList.add('correct');
-                playCheerSound();
+                try { playCheerSound(); } catch(e) { /* ignore audio errors */ }
                 showSuccessSplash('Parabéns! 🎉');
                 setTimeout(() => nextQuestion(), 800);
             } else {
                 btn.classList.add('wrong');
-                playOhSound();
+                try { playOhSound(); } catch(e) { /* ignore audio errors */ }
                 stars = Math.max(0, stars - 1);
                 document.getElementById('stars').textContent = '⭐'.repeat(stars) + '☆'.repeat(5 - stars);
                 btns.forEach(b => { if (b.textContent === correct) b.classList.add('correct'); });
