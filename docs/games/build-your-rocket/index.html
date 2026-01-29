@@ -160,10 +160,14 @@
         function nextQuestion() {
             currentQ++;
             if (currentQ >= levels[currentLevel].questions.length) {
+                const unlockedPart = partNames[currentLevel];
                 document.getElementById('part-' + currentLevel).classList.remove('locked');
                 document.getElementById('part-' + currentLevel).classList.add('unlocked');
                 parts++;
                 document.getElementById('parts').textContent = parts;
+                playPling();
+                const remaining = partNames.slice(currentLevel + 1);
+                showUnlockNotice(unlockedPart, remaining);
                 currentLevel++;
                 currentQ = 0;
                 if (currentLevel >= levels.length) {
