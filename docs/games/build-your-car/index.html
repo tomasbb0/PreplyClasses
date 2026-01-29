@@ -36,6 +36,14 @@
         /* Small transient success splash (for each correct answer) */
         .success-splash { position: fixed; left: 50%; top: 18%; transform: translateX(-50%) translateY(-10px); background: linear-gradient(90deg, #10B981, #06B6D4); color: white; padding: 12px 24px; border-radius: 20px; font-weight: 800; font-size: 1.25rem; z-index: 200; opacity: 0; transition: all 0.35s cubic-bezier(.22,.9,.25,1); }
         .success-splash.visible { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.05); }
+
+        /* Failure splash */
+        .failure-splash { position: fixed; left: 50%; top: 18%; transform: translateX(-50%) translateY(-10px); background: linear-gradient(90deg,#EF4444,#F97316); color:white; padding:12px 24px; border-radius:20px; font-weight:800; z-index:200; opacity:0; transition: all 0.35s cubic-bezier(.22,.9,.25,1); }
+        .failure-splash.visible { opacity:1; transform: translateX(-50%) translateY(0) scale(1.05); }
+
+        /* Unlock notice */
+        .unlock-notice { position: fixed; left:50%; top:12%; transform: translateX(-50%) translateY(-12px); background: #111827; color: white; padding: 14px 20px; border-radius: 12px; z-index: 210; opacity:0; transition: all .35s; box-shadow: 0 10px 30px rgba(0,0,0,0.3); pointer-events: none; }
+        .unlock-notice.visible { opacity:1; transform: translateX(-50%) translateY(0) scale(1.02); }
         .play-btn { background: #4F46E5; color: white; border: none; padding: 16px 48px; font-size: 1.2rem; font-weight: 700; border-radius: 12px; cursor: pointer; font-family: inherit; margin-top: 16px; }
         .play-btn:hover { background: #4338CA; }
         .hidden { display: none !important; }
@@ -55,12 +63,14 @@
             <div class="score-display">Peças: <span id="parts">0</span>/6</div>
             
             <div class="car-display" id="car">
-                <div class="car-part locked" id="part-0">🚗</div>
-                <div class="car-part locked" id="part-1">⚫</div>
-                <div class="car-part locked" id="part-2">⚫</div>
-                <div class="car-part locked" id="part-3">🪟</div>
-                <div class="car-part locked" id="part-4">🚪</div>
-                <div class="car-part locked" id="part-5">💡</div>
+                <div style="display: grid; grid-template-columns: repeat(4, 50px); grid-template-rows: repeat(3, 50px); gap: 2px; margin: 0 auto; justify-items: center; align-items: center;">
+                    <div style="grid-column: 2 / 4; grid-row: 1;"><div class="car-part locked" id="part-3">🪟</div></div>
+                    <div style="grid-column: 1 / 2; grid-row: 2;"><div class="car-part locked" id="part-0">🚗</div></div>
+                    <div style="grid-column: 2 / 4; grid-row: 2; display: flex; justify-content: center;"><div class="car-part locked" id="part-4">🚪</div></div>
+                    <div style="grid-column: 4 / 5; grid-row: 2;"><div class="car-part locked" id="part-5">💡</div></div>
+                    <div style="grid-column: 1 / 2; grid-row: 3;"><div class="car-part locked" id="part-1">⚫</div></div>
+                    <div style="grid-column: 4 / 5; grid-row: 3;"><div class="car-part locked" id="part-2">⚫</div></div>
+                </div>
             </div>
             
             <div class="question-box">
@@ -117,6 +127,7 @@
         ];
         
         let currentLevel = 0, currentQ = 0, stars = 5, parts = 0;
+        const partNames = ['Body','Left Wheel','Right Wheel','Window','Door','Headlight'];
         
         function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
         
@@ -148,7 +159,6 @@
                 btn.classList.add('correct');
                 // schedule progression first so errors in audio/UI cannot block the game
                 setTimeout(() => nextQuestion(), 800);
-                try { playSuccessSound(); } catch(e) { /* ignore audio errors */ }
                 try { playCheerSound(); } catch(e) { /* ignore audio errors */ }
                 try { showSuccessSplash('Parabéns! 🎉'); } catch(e) { /* ignore UI errors */ }
             } else {
@@ -172,10 +182,8 @@
                 document.getElementById('part-' + currentLevel).classList.add('unlocked');
                 parts++;
                 document.getElementById('parts').textContent = parts;
-                // Play unlock pling and show notice
+                // Play unlock pling
                 playPling();
-                const remaining = partNames.slice(currentLevel + 1);
-                showUnlockNotice(unlockedPart, remaining);
                 
                 currentLevel++;
                 currentQ = 0;
@@ -280,20 +288,6 @@
             const s = document.createElement('div'); s.className='failure-splash'; s.textContent=text; document.body.appendChild(s);
             requestAnimationFrame(()=> s.classList.add('visible'));
             setTimeout(()=> { s.classList.remove('visible'); setTimeout(()=> s.remove(), 400); }, 1200);
-        }
-        function showUnlockNotice(partName, remainingParts=[]) {
-            const msg = document.createElement('div');
-            msg.className = 'unlock-notice';
-            msg.textContent = 'Hurray! You found the ' + partName + ' part!';
-            if (remainingParts.length) {
-                msg.textContent += ' Still need: ' + remainingParts.join(', ');
-            }
-            document.body.appendChild(msg);
-            requestAnimationFrame(() => msg.classList.add('visible'));
-            setTimeout(() => {
-                msg.classList.remove('visible');
-                setTimeout(() => msg.remove(), 350);
-            }, 2500);
         }
         
         // One-time resume of AudioContext on first user gesture to ensure sounds play
