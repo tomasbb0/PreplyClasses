@@ -1590,6 +1590,35 @@
       }
 
       /* ===== LOADER ===== */
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--bg-primary);
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+      }
+      .loading-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .loading-overlay h2 {
+        font-size: 28px;
+        font-weight: 600;
+        margin-top: 16px;
+      }
+      .loading-overlay p {
+        font-size: 18px;
+        color: var(--text-secondary);
+      }
       .loader {
         display: inline-flex;
         gap: 4px;
@@ -1749,6 +1778,42 @@
     </style>
   </head>
   <body class="login-view">
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+      <div class="logo-icon">
+        <svg viewBox="-2 -2 100 114" width="72" height="78" fill="none">
+          <path
+            d="M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z"
+            stroke="#fafafa"
+            stroke-width="2.5"
+            fill="none"
+            stroke-linejoin="miter"
+          />
+          <line
+            x1="10"
+            y1="48"
+            x2="48"
+            y2="48"
+            stroke="#fafafa"
+            stroke-width="2.5"
+          />
+          <polyline
+            points="70,4 70,70 48,96 92,96"
+            stroke="#fafafa"
+            stroke-width="2.5"
+            fill="none"
+            stroke-linejoin="miter"
+          />
+        </svg>
+      </div>
+      <h2>Welcome</h2>
+      <p id="loading-user-name"></p>
+      <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
     <!-- Login Screen -->
     <div id="login-screen">
       <div class="login-header">
@@ -2187,12 +2252,25 @@
             document.getElementById("username").value = u;
             document.getElementById("password").value = p;
             document.getElementById("remember-me").checked = true;
-            // Auto-login
+            // Auto-login with loading overlay
             if (u && p) {
+              var savedHeaderName = localStorage.getItem("bl_header_name_" + u);
+              var displayName = savedHeaderName || u;
+              document.getElementById("loading-user-name").textContent =
+                displayName;
+              document
+                .getElementById("loading-overlay")
+                .classList.remove("hidden");
+
               setTimeout(function () {
                 document
                   .getElementById("login-form")
                   .dispatchEvent(new Event("submit"));
+                setTimeout(function () {
+                  document
+                    .getElementById("loading-overlay")
+                    .classList.add("hidden");
+                }, 1500);
               }, 100);
             }
           } catch (e) {}
