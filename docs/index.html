@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0a0a" />
     <title>The Burnay Lab</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -2 100 114' fill='none'%3E%3Cpath d='M10,6 L48,6 L58,16 L58,38 L48,48 L58,58 L58,84 L48,96 L10,96 Z' stroke='%23fafafa' stroke-width='2.5' fill='none' stroke-linejoin='miter'/%3E%3Cline x1='10' y1='48' x2='48' y2='48' stroke='%23fafafa' stroke-width='2.5'/%3E%3Cpolyline points='70,4 70,70 48,96 92,96' stroke='%23fafafa' stroke-width='2.5' fill='none' stroke-linejoin='miter'/%3E%3C/svg%3E" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -210,12 +212,51 @@
         text-transform: uppercase;
         margin-top: 16px;
         transition: all 0.3s ease;
+        position: relative;
       }
       #login-screen .btn:hover {
         background: var(--text-primary);
         color: var(--bg-primary);
         border-color: var(--text-primary);
         opacity: 1;
+      }
+      #login-screen .btn.loading {
+        color: transparent;
+        pointer-events: none;
+      }
+      #login-screen .btn.loading::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 14px;
+        height: 14px;
+        margin: -7px 0 0 -7px;
+        border: 1.5px solid var(--text-muted);
+        border-top-color: var(--text-primary);
+        border-radius: 50%;
+        animation: btnSpin 0.6s linear infinite;
+      }
+      @keyframes btnSpin {
+        to { transform: rotate(360deg); }
+      }
+      .remember-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .remember-row input[type="checkbox"] {
+        width: 14px;
+        height: 14px;
+        accent-color: var(--text-primary);
+        cursor: pointer;
+      }
+      .remember-row label {
+        font-size: 11px;
+        color: var(--text-muted);
+        cursor: pointer;
+        user-select: none;
       }
       .hidden {
         display: none !important;
@@ -1501,7 +1542,7 @@
       }
       #login-screen > .by-line {
         opacity: 0;
-        animation: fadeInUp 0.5s ease-out 4.0s forwards;
+        animation: fadeInUp 0.5s ease-out 4s forwards;
         text-align: center;
       }
       #login-form {
@@ -1575,7 +1616,11 @@
             placeholder="Password"
           />
         </div>
-        <button type="submit" class="btn">Sign In</button>
+        <div class="remember-row">
+          <input type="checkbox" id="remember-me" />
+          <label for="remember-me">Remember me</label>
+        </div>
+        <button type="submit" class="btn" id="sign-in-btn">Sign In</button>
         <div id="login-error" class="error-message"></div>
       </form>
       <p class="by-line">
@@ -1933,6 +1978,19 @@
       var currentUser = null;
       var selectedStudent = null;
 
+      // Remember Me: restore saved credentials on load
+      (function () {
+        var saved = localStorage.getItem("bl_remember");
+        if (saved) {
+          try {
+            var creds = JSON.parse(saved);
+            document.getElementById("username").value = creds.u || "";
+            document.getElementById("password").value = creds.p || "";
+            document.getElementById("remember-me").checked = true;
+          } catch (e) {}
+        }
+      })();
+
       // Login
       document.getElementById("login-form").onsubmit = function (e) {
         e.preventDefault();
@@ -1942,8 +2000,26 @@
           .toLowerCase();
         var password = document.getElementById("password").value;
         var errorDiv = document.getElementById("login-error");
+        var signInBtn = document.getElementById("sign-in-btn");
+
+        errorDiv.classList.remove("show");
+        signInBtn.classList.add("loading");
+
+        function onLoginDone() {
+          signInBtn.classList.remove("loading");
+        }
+
+        function saveRemember(u, p) {
+          if (document.getElementById("remember-me").checked) {
+            localStorage.setItem("bl_remember", JSON.stringify({ u: u, p: p }));
+          } else {
+            localStorage.removeItem("bl_remember");
+          }
+        }
 
         if (USERS[username] && USERS[username].password === password) {
+          saveRemember(username, password);
+          onLoginDone();
           loginSuccess(username, USERS[username]);
           return;
         }
@@ -1962,14 +2038,18 @@
                   name: student.name,
                   studentId: studentDoc.id,
                 };
+                saveRemember(username, password);
+                onLoginDone();
                 loginSuccess(username, USERS[username]);
                 return;
               }
             }
+            onLoginDone();
             errorDiv.textContent = "Invalid username or password";
             errorDiv.classList.add("show");
           })
           .catch(function (err) {
+            onLoginDone();
             errorDiv.textContent = "Login error: " + err.message;
             errorDiv.classList.add("show");
           });
