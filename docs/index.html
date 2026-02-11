@@ -2623,11 +2623,16 @@
             .get()
             .then(function (snap) {
               var list = document.getElementById(tab + "-list");
+              // Keep the add button, only replace items after it
               if (snap.empty) {
-                list.innerHTML =
-                  '<div class="empty-state">No ' + tab + " yet</div>";
+                while (list.children.length > 1) {
+                  list.removeChild(list.lastChild);
+                }
               } else {
-                list.innerHTML = "";
+                // Remove old items but keep add button
+                while (list.children.length > 1) {
+                  list.removeChild(list.lastChild);
+                }
                 snap.forEach(function (doc) {
                   var item = doc.data();
                   var deleteBtn = isAdmin
@@ -2640,10 +2645,10 @@
                       " Delete</button>"
                     : "";
                   if (tab === "games") {
-                    list.innerHTML +=
-                      '<div class="item-card"><div class="item-icon">' +
-                      SVG.game +
-                      '</div><div class="item-content"><div class="item-title">' +
+                    var card = document.createElement("div");
+                    card.className = "item-card";
+                    card.innerHTML =
+                      '<div class="item-content"><div class="item-title">' +
                       (item.title || "Game") +
                       '</div><div class="item-desc">' +
                       (item.description || "") +
@@ -2653,12 +2658,13 @@
                       SVG.play +
                       " Play Game</a>" +
                       deleteBtn +
-                      "</div></div></div>";
+                      "</div></div>";
+                    list.appendChild(card);
                   } else {
-                    list.innerHTML +=
-                      '<div class="item-card"><div class="item-icon">' +
-                      SVG.doc +
-                      '</div><div class="item-content"><div class="item-title">' +
+                    var card = document.createElement("div");
+                    card.className = "item-card";
+                    card.innerHTML =
+                      '<div class="item-content"><div class="item-title">' +
                       (item.title || "Untitled") +
                       '</div><div class="item-desc">' +
                       (item.description || item.url || "") +
@@ -2671,7 +2677,8 @@
                           "</span>"
                         : "") +
                       deleteBtn +
-                      "</div></div></div>";
+                      "</div></div>";
+                    list.appendChild(card);
                   }
                 });
               }
@@ -2688,12 +2695,19 @@
           .orderBy("createdAt", "desc")
           .get()
           .then(function (snap) {
+            // Keep the add button, only replace items after it
+            var addCard = list.querySelector(".add-item-card");
             if (snap.empty) {
-              list.innerHTML =
-                '<div class="empty-state">No diagnostics assigned</div>';
+              // Keep add button, remove everything else
+              while (list.children.length > 1) {
+                list.removeChild(list.lastChild);
+              }
               return;
             }
-            list.innerHTML = "";
+            // Remove old items but keep add button
+            while (list.children.length > 1) {
+              list.removeChild(list.lastChild);
+            }
             snap.forEach(function (doc) {
               var item = doc.data();
               var statusClass =
@@ -2721,10 +2735,10 @@
                   SVG.trash +
                   " Delete</button>"
                 : "";
-              list.innerHTML +=
-                '<div class="item-card"><div class="item-icon">' +
-                SVG.doc +
-                '</div><div class="item-content"><div class="item-title">' +
+              var card = document.createElement("div");
+              card.className = "item-card";
+              card.innerHTML =
+                '<div class="item-content"><div class="item-title">' +
                 (item.title || "Diagnostic") +
                 '</div><div class="item-desc">' +
                 (item.description || "") +
@@ -2735,7 +2749,8 @@
                 "</span>" +
                 actionBtn +
                 deleteBtn +
-                "</div></div></div>";
+                "</div></div>";
+              list.appendChild(card);
             });
           });
       }
