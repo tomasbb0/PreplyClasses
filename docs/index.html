@@ -701,26 +701,27 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 16px;
-        background: var(--bg-primary);
-        border: 0.5px solid var(--border);
-        border-radius: var(--radius-lg);
+        padding: 0;
+        background: none;
+        border: none;
         cursor: pointer;
         transition: var(--transition);
-        margin-bottom: 16px;
         position: relative;
         z-index: 1;
       }
-      .add-item-card:hover {
-        border-color: var(--border-hover);
-        transform: translateY(-2px);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      }
       .add-item-card .btn-small {
-        padding: 12px 24px;
+        padding: 10px 20px;
         font-size: 13px;
-        background: var(--bg-primary);
-        border-color: var(--border);
+        background: var(--bg-secondary);
+        border: 0.5px solid var(--border);
+        border-radius: 20px;
+        width: 100%;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .add-item-card .btn-small:hover {
+        border-color: var(--border-hover);
+        background: var(--bg-tertiary);
       }
       .item-card {
         display: flex;
@@ -1598,12 +1599,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: radial-gradient(
-          circle at center,
-          rgba(103, 126, 234, 0.15) 0%,
-          rgba(10, 10, 10, 0.95) 100%
-        ),
-        var(--bg-primary);
+        background: #000;
         z-index: 10000;
         display: flex;
         flex-direction: column;
@@ -1612,42 +1608,45 @@
         gap: 0;
         opacity: 1;
         transition: opacity 0.5s ease;
-        backdrop-filter: blur(20px);
       }
       .loading-overlay.hidden {
         opacity: 0;
         pointer-events: none;
       }
       .loading-logo {
-        animation: logoZoomOut 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        animation: logoZoomOut 0.8s cubic-bezier(0.16, 1, 0.3, 1) 2.2s forwards;
         transform: scale(2.5);
         margin-bottom: 24px;
       }
       .loading-logo .logo-b {
         stroke-dasharray: 400;
         stroke-dashoffset: 400;
-        animation: drawB 1s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
+        animation: drawB 1s ease-out 0.3s forwards;
       }
       .loading-logo .logo-b-bar {
-        stroke-dasharray: 50;
-        stroke-dashoffset: 50;
-        animation: drawBbar 0.3s 0.8s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
+        stroke-dasharray: 38;
+        stroke-dashoffset: 38;
+        animation: drawBbar 0.3s ease-out 0.9s forwards;
       }
       .loading-logo .logo-l {
-        stroke-dasharray: 200;
-        stroke-dashoffset: 200;
-        animation: drawL 0.7s 0.3s cubic-bezier(0.47, 0, 0.745, 0.715) forwards;
+        stroke-dasharray: 160;
+        stroke-dashoffset: 160;
+        animation: drawL 0.7s ease-out 1.1s forwards;
       }
       .loading-welcome {
         font-size: 28px;
         font-weight: 600;
         margin: 0 0 8px 0;
         color: var(--text-primary);
+        opacity: 0;
+        animation: fadeInUp 0.6s ease-out 3s forwards;
       }
       .loading-name {
         font-size: 18px;
         color: var(--text-secondary);
         margin: 0 0 32px 0;
+        opacity: 0;
+        animation: fadeInUp 0.5s ease-out 3.2s forwards;
       }
       .loader {
         display: inline-flex;
@@ -2303,7 +2302,7 @@
                   document
                     .getElementById("loading-overlay")
                     .classList.add("hidden");
-                }, 1500);
+                }, 4000);
               }, 100);
             }
           } catch (e) {}
