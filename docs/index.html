@@ -68,7 +68,7 @@
         --yellow: #ff9f0a;
         --red: #ff3b30;
         --shadow-section: 0 2px 12px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.08);
-        --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.15), 0 0 1px rgba(255, 255, 255, 0.05);
+        --shadow-card: 0 1px 6px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
       }
       [data-theme="light"] .logo-icon svg path,
       [data-theme="light"] .logo-icon svg line,
@@ -103,6 +103,62 @@
       }
       [data-theme="light"] #theme-toggle {
         color: #fafafa;
+      }
+      [data-theme="light"] .student-item.active .student-avatar {
+        background: #4F46E5;
+        color: #ffffff;
+      }
+      /* Login screen stays dark in light mode — override text colors to stay light */
+      [data-theme="light"] #login-screen {
+        color: #fafafa;
+      }
+      [data-theme="light"] .login-header h1 {
+        color: #fafafa;
+      }
+      [data-theme="light"] .subtitle {
+        color: #a1a1a1;
+      }
+      [data-theme="light"] #login-screen .form-group input {
+        color: #fafafa;
+        caret-color: #fafafa;
+        border-bottom-color: rgba(255, 255, 255, 0.12);
+      }
+      [data-theme="light"] #login-screen .form-group input:focus {
+        border-bottom-color: #fafafa;
+        box-shadow: 0 1px 0 0 #fafafa;
+      }
+      [data-theme="light"] #login-screen .form-group input::placeholder {
+        color: #8e8e93;
+      }
+      [data-theme="light"] #login-screen .form-group label {
+        color: #a1a1a1;
+      }
+      [data-theme="light"] #login-screen .btn {
+        color: #fafafa;
+        border-color: rgba(255, 255, 255, 0.12);
+      }
+      [data-theme="light"] #login-screen .btn:hover {
+        background: #fafafa;
+        color: #0a0a0a;
+        border-color: #fafafa;
+      }
+      [data-theme="light"] #login-screen .by-line {
+        color: #8e8e93;
+        border-top-color: rgba(255, 255, 255, 0.08);
+      }
+      [data-theme="light"] #login-screen .by-line a {
+        color: #a1a1a1;
+        border-bottom-color: rgba(255, 255, 255, 0.12);
+      }
+      [data-theme="light"] #login-screen .by-line a:hover {
+        color: #fafafa;
+      }
+      /* Diagnostic overlay stays dark — keep light text */
+      [data-theme="light"] .diag-overlay {
+        color: #fafafa;
+      }
+      [data-theme="light"] .item-card {
+        background: #f9f9fb;
       }
       @keyframes borderGlowLight {
         0% {
@@ -827,7 +883,7 @@
         display: flex;
         gap: 16px;
         padding: 16px;
-        background: var(--bg-primary);
+        background: var(--bg-secondary);
         border: none;
         border-radius: var(--radius-lg);
         box-shadow: var(--shadow-card);
