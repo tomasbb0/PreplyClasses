@@ -307,11 +307,8 @@
         justify-content: space-between;
         padding: 0 24px;
         height: 56px;
-        background: rgba(20, 20, 20, 0.85);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        background: var(--bg-primary);
+        border-bottom: 0.5px solid var(--border);
         animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       }
       .header-left,
@@ -1987,7 +1984,11 @@
               </svg>
               <h2>Welcome</h2>
               <p id="welcome-message">
-                Select a student from the sidebar to begin.
+                <span
+                  id="welcome-name-display"
+                  style="cursor: pointer; text-decoration: underline"
+                  onclick="editWelcomeName()"
+                ></span>
               </p>
             </div>
           </div>
@@ -2250,6 +2251,7 @@
           password: userData.password,
           role: userData.role,
           name: userData.name,
+          displayName: userData.displayName || userData.name.split(" ")[0],
         };
         document.body.className = "dashboard-view";
         document.getElementById("login-screen").classList.add("hidden");
@@ -2258,6 +2260,8 @@
           currentUser.name;
         document.getElementById("user-role-badge").textContent =
           currentUser.role;
+        document.getElementById("welcome-name-display").textContent =
+          currentUser.displayName;
         document.getElementById("login-error").classList.remove("show");
         if (currentUser.role === "admin") {
           document.getElementById("admin-panel").classList.remove("hidden");
@@ -2286,6 +2290,38 @@
         this.classList.toggle("open");
         document.getElementById("students-content").classList.toggle("open");
       };
+
+      // Edit welcome name
+      function editWelcomeName() {
+        var newName = prompt(
+          "What name would you like to be greeted with?",
+          currentUser.displayName,
+        );
+        if (newName && newName.trim()) {
+          currentUser.displayName = newName.trim();
+          document.getElementById("welcome-name-display").textContent =
+            currentUser.displayName;
+          // Save to Firebase
+          if (currentUser.role === "student") {
+            db.collection("students")
+              .where("name", "==", currentUser.name)
+              .get()
+              .then(function (snap) {
+                if (!snap.empty) {
+                  snap.docs[0].ref.update({
+                    displayName: currentUser.displayName,
+                  });
+                }
+              });
+          } else {
+            // For admin, save to localStorage or Firebase users
+            localStorage.setItem(
+              "bl_display_name_" + currentUser.username,
+              currentUser.displayName,
+            );
+          }
+        }
+      }
 
       // Load Students
       function loadStudents() {
