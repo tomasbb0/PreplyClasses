@@ -1994,6 +1994,506 @@
         }
       }
 
+      /* ===== SEARCH BAR ===== */
+      .search-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        margin-bottom: 12px;
+        transition: var(--transition);
+      }
+      .search-bar:focus-within {
+        border-color: var(--border-hover);
+        background: var(--bg-secondary);
+      }
+      .search-bar svg {
+        width: 16px;
+        height: 16px;
+        stroke: var(--text-muted);
+        fill: none;
+        stroke-width: 1.5;
+        flex-shrink: 0;
+      }
+      .search-bar input {
+        flex: 1;
+        background: none;
+        border: none;
+        outline: none;
+        font-family: inherit;
+        font-size: 13px;
+        color: var(--text-primary);
+      }
+      .search-bar input::placeholder {
+        color: var(--text-muted);
+      }
+
+      /* ===== VOCABULARY BANK ===== */
+      .vocab-card {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        background: var(--bg-secondary);
+        border: none;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        transition: var(--transition);
+        animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .vocab-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+      .vocab-emoji {
+        font-size: 28px;
+        line-height: 1;
+      }
+      .vocab-content {
+        flex: 1;
+        min-width: 0;
+      }
+      .vocab-pt {
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 2px;
+      }
+      .vocab-en {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+      .vocab-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 4px;
+      }
+      .vocab-category {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
+        font-weight: 500;
+      }
+      .vocab-mastery {
+        font-size: 11px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+      .vocab-mastery-bar {
+        width: 40px;
+        height: 4px;
+        background: var(--bg-tertiary);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+      .vocab-mastery-fill {
+        height: 100%;
+        border-radius: 2px;
+        transition: width 0.3s;
+      }
+      [data-theme="light"] .vocab-card {
+        background: #f9f9fb;
+      }
+
+      /* ===== HOMEWORK TRACKER ===== */
+      .homework-card {
+        padding: 16px;
+        background: var(--bg-secondary);
+        border: none;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        transition: var(--transition);
+        animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .homework-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+      .homework-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 8px;
+      }
+      .homework-title {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .homework-due {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-weight: 500;
+      }
+      .homework-due.overdue {
+        background: rgba(239, 68, 68, 0.1);
+        color: var(--red);
+      }
+      .homework-due.today {
+        background: rgba(234, 179, 8, 0.1);
+        color: var(--yellow);
+      }
+      .homework-due.upcoming {
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+      }
+      .homework-desc {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        line-height: 1.5;
+      }
+      .homework-progress {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .homework-progress-bar {
+        flex: 1;
+        height: 6px;
+        background: var(--bg-tertiary);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .homework-progress-fill {
+        height: 100%;
+        background: var(--green);
+        border-radius: 3px;
+        transition: width 0.3s;
+      }
+      .homework-progress-text {
+        font-size: 11px;
+        color: var(--text-muted);
+        min-width: 30px;
+        text-align: right;
+      }
+      [data-theme="light"] .homework-card {
+        background: #f9f9fb;
+      }
+
+      /* ===== CLASS TIMER ===== */
+      .timer-widget {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 900;
+        display: none;
+      }
+      .timer-widget.visible {
+        display: block;
+        animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .timer-fab {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        font-family: inherit;
+      }
+      .timer-fab:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 28px rgba(0, 0, 0, 0.4);
+      }
+      .timer-fab svg {
+        width: 24px;
+        height: 24px;
+        stroke: var(--text-primary);
+        fill: none;
+        stroke-width: 1.5;
+      }
+      .timer-fab .timer-fab-time {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      .timer-panel {
+        position: absolute;
+        bottom: 68px;
+        right: 0;
+        width: 240px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        display: none;
+      }
+      .timer-panel.open {
+        display: block;
+        animation: slideUp 0.2s ease;
+      }
+      .timer-display {
+        text-align: center;
+        font-size: 36px;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        margin-bottom: 16px;
+        letter-spacing: -0.02em;
+      }
+      .timer-controls {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+      }
+      .timer-btn {
+        padding: 8px 16px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 500;
+        transition: var(--transition);
+      }
+      .timer-btn:hover {
+        background: var(--bg-elevated);
+      }
+      .timer-btn.primary {
+        background: var(--text-primary);
+        color: var(--bg-primary);
+        border-color: transparent;
+      }
+      .timer-btn.primary:hover {
+        opacity: 0.9;
+      }
+      .timer-presets {
+        display: flex;
+        gap: 6px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .timer-preset {
+        padding: 4px 10px;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        background: transparent;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 11px;
+        transition: var(--transition);
+      }
+      .timer-preset:hover {
+        border-color: var(--border-hover);
+        color: var(--text-primary);
+      }
+
+      /* ===== LESSON PLANNER ===== */
+      .planner-week {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+      .planner-day {
+        padding: 10px 8px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+        min-height: 70px;
+      }
+      .planner-day:hover {
+        border-color: var(--border-hover);
+      }
+      .planner-day.today {
+        border-color: var(--text-primary);
+      }
+      .planner-day.has-lesson {
+        background: var(--bg-tertiary);
+      }
+      .planner-day-label {
+        font-size: 10px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 4px;
+      }
+      .planner-day-num {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .planner-day-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--green);
+        border-radius: 50%;
+        margin: 4px auto 0;
+      }
+      .planner-lesson {
+        padding: 12px 16px;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-card);
+        margin-bottom: 8px;
+      }
+      .planner-lesson-time {
+        font-size: 12px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 4px;
+      }
+      .planner-lesson-title {
+        font-weight: 600;
+        font-size: 14px;
+      }
+      .planner-lesson-topics {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+      }
+
+      /* ===== PROGRESS CHARTS ===== */
+      .progress-overview {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
+        margin-bottom: 20px;
+      }
+      .progress-stat {
+        padding: 16px;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        text-align: center;
+        transition: var(--transition);
+      }
+      .progress-stat:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+      .progress-stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .progress-stat-label {
+        font-size: 11px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .progress-chart {
+        padding: 16px;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        margin-bottom: 16px;
+      }
+      .progress-chart h4 {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 12px;
+      }
+      .bar-chart {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        height: 120px;
+        padding-top: 8px;
+      }
+      .bar-chart-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        height: 100%;
+        justify-content: flex-end;
+      }
+      .bar-chart-bar {
+        width: 100%;
+        max-width: 32px;
+        border-radius: 4px 4px 0 0;
+        background: var(--text-muted);
+        transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        opacity: 0.6;
+      }
+      .bar-chart-label {
+        font-size: 10px;
+        color: var(--text-muted);
+        text-align: center;
+      }
+
+      /* ===== DRAG REORDER ===== */
+      .item-card.dragging {
+        opacity: 0.5;
+        transform: scale(0.98);
+      }
+      .item-card.drag-over {
+        border-top: 2px solid var(--text-primary);
+      }
+      .drag-handle {
+        cursor: grab;
+        padding: 4px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .item-card:hover .drag-handle {
+        opacity: 1;
+      }
+      .drag-handle:active {
+        cursor: grabbing;
+      }
+      .drag-handle svg {
+        width: 14px;
+        height: 14px;
+        fill: currentColor;
+        stroke: none;
+      }
+
+      /* ===== PHOTO AVATAR ===== */
+      .student-avatar.has-photo {
+        background-size: cover;
+        background-position: center;
+        color: transparent;
+        border: 2px solid var(--border);
+      }
+      .student-avatar.has-photo:hover {
+        border-color: var(--border-hover);
+      }
+      .avatar-upload-label {
+        display: block;
+        text-align: center;
+        margin-top: 12px;
+        cursor: pointer;
+        color: var(--text-muted);
+        font-size: 12px;
+        transition: color 0.2s;
+      }
+      .avatar-upload-label:hover {
+        color: var(--text-primary);
+      }
+
       /* ===== SCROLLBAR ===== */
       ::-webkit-scrollbar {
         width: 4px;
@@ -2305,6 +2805,32 @@
               </svg>
               Class Log
             </button>
+            <button class="nav-tab" data-tab="vocab">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M11.25 4.533A9.707 9.707 0 0 0 6 3a9.735 9.735 0 0 0-3.25.555.75.75 0 0 0-.5.707v14.25a.75.75 0 0 0 1 .707A8.237 8.237 0 0 1 6 18.75c1.995 0 3.823.707 5.25 1.886V4.533ZM12.75 20.636A8.214 8.214 0 0 1 18 18.75c.966 0 1.89.166 2.75.47a.75.75 0 0 0 1-.708V4.262a.75.75 0 0 0-.5-.707A9.735 9.735 0 0 0 18 3a9.707 9.707 0 0 0-5.25 1.533v16.103Z"
+                />
+              </svg>
+              Vocab Bank
+            </button>
+            <button class="nav-tab" data-tab="homework">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Zm17.25 5.25h-19.5v8.25a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3V9Zm-9 4.5a.75.75 0 0 0 0 1.5h3.75a.75.75 0 0 0 0-1.5H12.75Z"
+                />
+              </svg>
+              Homework
+            </button>
+            <button class="nav-tab" data-tab="planner">
+              <svg viewBox="0 0 24 24">
+                <path
+                  fill-rule="evenodd"
+                  d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Planner
+            </button>
           </div>
         </aside>
         <main class="main-panel">
@@ -2406,8 +2932,96 @@
               <div class="empty-state">No class log entries yet</div>
             </div>
           </div>
+          <div id="vocab-panel" class="panel">
+            <div class="search-bar" id="vocab-search">
+              <svg viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search vocabulary..."
+                oninput="filterVocab(this.value)"
+              />
+            </div>
+            <div id="vocab-list" class="items-list">
+              <div class="add-item-card">
+                <button id="add-vocab-btn" class="btn-small">+ Add Word</button>
+              </div>
+              <div class="empty-state">No vocabulary words yet</div>
+            </div>
+          </div>
+          <div id="homework-panel" class="panel">
+            <div id="homework-list" class="items-list">
+              <div class="add-item-card">
+                <button id="add-homework-btn" class="btn-small">
+                  + Add Assignment
+                </button>
+              </div>
+              <div class="empty-state">No homework assigned</div>
+            </div>
+          </div>
+          <div id="planner-panel" class="panel">
+            <div
+              id="planner-header"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 16px;
+              "
+            >
+              <button class="btn-small" id="planner-prev">&larr; Prev</button>
+              <h3
+                id="planner-month"
+                style="font-size: 16px; font-weight: 600"
+              ></h3>
+              <button class="btn-small" id="planner-next">Next &rarr;</button>
+            </div>
+            <div id="planner-calendar" class="planner-week"></div>
+            <div style="margin-top: 16px">
+              <div class="add-item-card">
+                <button id="add-lesson-btn" class="btn-small">
+                  + Add Lesson
+                </button>
+              </div>
+              <div id="planner-lessons"></div>
+              <div class="empty-state" id="planner-empty">
+                No lessons planned this week
+              </div>
+            </div>
+          </div>
         </main>
       </div>
+    </div>
+
+    <!-- Class Timer Widget -->
+    <div id="timer-widget" class="timer-widget">
+      <div id="timer-panel" class="timer-panel">
+        <div class="timer-display" id="timer-display">00:00</div>
+        <div class="timer-controls">
+          <button class="timer-btn primary" id="timer-start">Start</button>
+          <button class="timer-btn" id="timer-reset">Reset</button>
+        </div>
+        <div class="timer-presets">
+          <button class="timer-preset" onclick="setTimer(5)">5m</button>
+          <button class="timer-preset" onclick="setTimer(10)">10m</button>
+          <button class="timer-preset" onclick="setTimer(15)">15m</button>
+          <button class="timer-preset" onclick="setTimer(25)">25m</button>
+          <button class="timer-preset" onclick="setTimer(45)">45m</button>
+        </div>
+      </div>
+      <button class="timer-fab" id="timer-fab" onclick="toggleTimerPanel()">
+        <svg id="timer-fab-icon" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span
+          id="timer-fab-time"
+          class="timer-fab-time"
+          style="display: none"
+        ></span>
+      </button>
     </div>
 
     <!-- Modal -->
@@ -2499,6 +3113,14 @@
           '<svg viewBox="0 0 24 24" width="16" height="16" stroke="var(--yellow)" fill="none" stroke-width="2"><path d="M12 2l10 10-10 10L2 12z"/></svg>',
         homework:
           '<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+        search:
+          '<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+        download:
+          '<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+        grip: '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" stroke="none"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>',
+        camera:
+          '<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+        star: '<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
       };
 
       // Firebase config
@@ -3808,6 +4430,1127 @@
             alert("Error: " + e.message);
           });
       }
+
+      // ========== VOCABULARY BANK ==========
+      function loadVocab() {
+        if (!selectedStudent) return;
+        var list = document.getElementById("vocab-list");
+        var isAdmin = currentUser && currentUser.role === "admin";
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("vocab")
+          .orderBy("createdAt", "desc")
+          .get()
+          .then(function (snap) {
+            while (list.children.length > 1) list.removeChild(list.lastChild);
+            if (snap.empty) return;
+            snap.forEach(function (doc) {
+              var word = doc.data();
+              var mastery = word.mastery || 0;
+              var masteryColor =
+                mastery >= 80
+                  ? "var(--green)"
+                  : mastery >= 50
+                    ? "var(--yellow)"
+                    : "var(--red)";
+              var deleteBtn = isAdmin
+                ? '<button class="delete-btn" onclick="deleteVocabWord(\'' +
+                  doc.id +
+                  "')\">" +
+                  SVG.trash +
+                  "</button>"
+                : "";
+              var card = document.createElement("div");
+              card.className = "vocab-card";
+              card.setAttribute(
+                "data-word",
+                (
+                  word.portuguese +
+                  " " +
+                  word.english +
+                  " " +
+                  (word.category || "")
+                ).toLowerCase(),
+              );
+              card.innerHTML =
+                '<div class="vocab-emoji">' +
+                (word.emoji || "📝") +
+                "</div>" +
+                '<div class="vocab-content">' +
+                '<div class="vocab-pt">' +
+                word.portuguese +
+                "</div>" +
+                '<div class="vocab-en">' +
+                word.english +
+                "</div>" +
+                '<div class="vocab-meta">' +
+                (word.category
+                  ? '<span class="vocab-category">' + word.category + "</span>"
+                  : "") +
+                '<span class="vocab-mastery"><span class="vocab-mastery-bar"><span class="vocab-mastery-fill" style="width:' +
+                mastery +
+                "%;background:" +
+                masteryColor +
+                '"></span></span> ' +
+                mastery +
+                "%</span>" +
+                "</div>" +
+                "</div>" +
+                '<div style="display:flex;align-items:center;gap:6px">' +
+                '<button class="btn-small" onclick="updateMastery(\'' +
+                doc.id +
+                "'," +
+                mastery +
+                ')" title="Update mastery">' +
+                SVG.star +
+                "</button>" +
+                deleteBtn +
+                "</div>";
+              list.appendChild(card);
+            });
+          });
+      }
+
+      function filterVocab(query) {
+        var q = query.toLowerCase();
+        document
+          .querySelectorAll("#vocab-list .vocab-card")
+          .forEach(function (card) {
+            var words = card.getAttribute("data-word") || "";
+            card.style.display = words.indexOf(q) !== -1 ? "" : "none";
+          });
+      }
+
+      function updateMastery(vocabId, current) {
+        var newVal = prompt("Set mastery % (0-100):", current);
+        if (newVal === null) return;
+        newVal = Math.max(0, Math.min(100, parseInt(newVal) || 0));
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("vocab")
+          .doc(vocabId)
+          .update({ mastery: newVal })
+          .then(function () {
+            loadVocab();
+          });
+      }
+
+      function deleteVocabWord(vocabId) {
+        if (!confirm("Delete this word?")) return;
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("vocab")
+          .doc(vocabId)
+          .delete()
+          .then(function () {
+            loadVocab();
+          });
+      }
+
+      document.getElementById("add-vocab-btn").onclick = function () {
+        if (!selectedStudent) {
+          alert("Select a student first");
+          return;
+        }
+        openModal(
+          "Add Vocabulary Word",
+          '<form id="vocab-form">' +
+            '<div class="form-group"><label>Emoji</label><input type="text" name="emoji" placeholder="🏠" maxlength="4"></div>' +
+            '<div class="form-group"><label>Portuguese</label><input type="text" name="portuguese" required placeholder="casa"></div>' +
+            '<div class="form-group"><label>English</label><input type="text" name="english" required placeholder="house"></div>' +
+            '<div class="form-group"><label>Category</label><input type="text" name="category" placeholder="e.g. Animals, Food, Colors"></div>' +
+            '<div class="form-group"><label>Mastery %</label><input type="number" name="mastery" min="0" max="100" value="0"></div>' +
+            '<button type="submit" class="btn">Add Word</button></form>',
+        );
+        document.getElementById("vocab-form").onsubmit = function (e) {
+          e.preventDefault();
+          var form = new FormData(this);
+          db.collection("students")
+            .doc(selectedStudent.id)
+            .collection("vocab")
+            .add({
+              emoji: form.get("emoji") || "📝",
+              portuguese: form.get("portuguese"),
+              english: form.get("english"),
+              category: form.get("category"),
+              mastery: parseInt(form.get("mastery")) || 0,
+              createdAt: new Date(),
+            })
+            .then(function () {
+              closeModal();
+              loadVocab();
+            });
+        };
+      };
+
+      // ========== HOMEWORK TRACKER ==========
+      function loadHomework() {
+        if (!selectedStudent) return;
+        var list = document.getElementById("homework-list");
+        var isAdmin = currentUser && currentUser.role === "admin";
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("homework")
+          .orderBy("dueDate", "asc")
+          .get()
+          .then(function (snap) {
+            while (list.children.length > 1) list.removeChild(list.lastChild);
+            if (snap.empty) return;
+            snap.forEach(function (doc) {
+              var hw = doc.data();
+              var progress = hw.progress || 0;
+              var dueDate = hw.dueDate || "";
+              var dueClass = "upcoming";
+              var dueLabel = dueDate;
+              if (dueDate) {
+                var today = new Date();
+                today.setHours(0, 0, 0, 0);
+                var due = new Date(dueDate + "T00:00:00");
+                var diff = Math.ceil((due - today) / 86400000);
+                if (diff < 0) {
+                  dueClass = "overdue";
+                  dueLabel = "Overdue";
+                } else if (diff === 0) {
+                  dueClass = "today";
+                  dueLabel = "Due Today";
+                } else {
+                  dueLabel =
+                    "Due " +
+                    due.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    });
+                }
+              }
+              var deleteBtn = isAdmin
+                ? '<button class="delete-btn" onclick="deleteHomework(\'' +
+                  doc.id +
+                  "')\">" +
+                  SVG.trash +
+                  " Delete</button>"
+                : "";
+              var toggleBtn =
+                '<button class="btn-small" onclick="toggleHomeworkDone(\'' +
+                doc.id +
+                "'," +
+                progress +
+                ')">' +
+                (progress >= 100 ? SVG.check + " Done" : "✓ Mark Done") +
+                "</button>";
+              var card = document.createElement("div");
+              card.className = "homework-card";
+              card.innerHTML =
+                '<div class="homework-header"><div class="homework-title">' +
+                (hw.title || "Assignment") +
+                "</div>" +
+                '<span class="homework-due ' +
+                dueClass +
+                '">' +
+                dueLabel +
+                "</span></div>" +
+                (hw.description
+                  ? '<div class="homework-desc">' + hw.description + "</div>"
+                  : "") +
+                '<div class="homework-progress"><div class="homework-progress-bar"><div class="homework-progress-fill" style="width:' +
+                progress +
+                '%"></div></div><span class="homework-progress-text">' +
+                progress +
+                "%</span></div>" +
+                '<div class="item-actions">' +
+                toggleBtn +
+                deleteBtn +
+                "</div>";
+              list.appendChild(card);
+            });
+          });
+      }
+
+      function toggleHomeworkDone(hwId, current) {
+        var newProgress = current >= 100 ? 0 : 100;
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("homework")
+          .doc(hwId)
+          .update({ progress: newProgress })
+          .then(function () {
+            loadHomework();
+          });
+      }
+
+      function deleteHomework(hwId) {
+        if (!confirm("Delete this assignment?")) return;
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("homework")
+          .doc(hwId)
+          .delete()
+          .then(function () {
+            loadHomework();
+          });
+      }
+
+      document.getElementById("add-homework-btn").onclick = function () {
+        if (!selectedStudent) {
+          alert("Select a student first");
+          return;
+        }
+        var today = new Date().toISOString().split("T")[0];
+        openModal(
+          "Add Assignment",
+          '<form id="homework-form">' +
+            '<div class="form-group"><label>Title</label><input type="text" name="title" required placeholder="e.g. Practice greetings"></div>' +
+            '<div class="form-group"><label>Description</label><textarea name="description" rows="3" placeholder="What should they do?"></textarea></div>' +
+            '<div class="form-group"><label>Due Date</label><input type="date" name="dueDate" value="' +
+            today +
+            '"></div>' +
+            '<button type="submit" class="btn">Add Assignment</button></form>',
+        );
+        document.getElementById("homework-form").onsubmit = function (e) {
+          e.preventDefault();
+          var form = new FormData(this);
+          db.collection("students")
+            .doc(selectedStudent.id)
+            .collection("homework")
+            .add({
+              title: form.get("title"),
+              description: form.get("description"),
+              dueDate: form.get("dueDate"),
+              progress: 0,
+              createdAt: new Date(),
+            })
+            .then(function () {
+              closeModal();
+              loadHomework();
+            });
+        };
+      };
+
+      // ========== CLASS TIMER ==========
+      var timerSeconds = 0;
+      var timerInterval = null;
+      var timerRunning = false;
+      var timerTarget = 0;
+
+      // Show timer for admin users after login
+      var _origLoginSuccess = loginSuccess;
+      loginSuccess = function (username, userData) {
+        _origLoginSuccess(username, userData);
+        if (userData.role === "admin") {
+          document.getElementById("timer-widget").classList.add("visible");
+        }
+      };
+
+      function toggleTimerPanel() {
+        document.getElementById("timer-panel").classList.toggle("open");
+      }
+
+      function setTimer(minutes) {
+        timerTarget = minutes * 60;
+        timerSeconds = timerTarget;
+        updateTimerDisplay();
+      }
+
+      function updateTimerDisplay() {
+        var mins = Math.floor(Math.abs(timerSeconds) / 60);
+        var secs = Math.abs(timerSeconds) % 60;
+        var display =
+          (mins < 10 ? "0" : "") + mins + ":" + (secs < 10 ? "0" : "") + secs;
+        document.getElementById("timer-display").textContent = display;
+        var fabTime = document.getElementById("timer-fab-time");
+        var fabIcon = document.getElementById("timer-fab-icon");
+        if (timerRunning) {
+          fabTime.textContent = display;
+          fabTime.style.display = "block";
+          fabIcon.style.display = "none";
+        } else {
+          fabTime.style.display = "none";
+          fabIcon.style.display = "block";
+        }
+      }
+
+      document.getElementById("timer-start").onclick = function () {
+        if (timerRunning) {
+          clearInterval(timerInterval);
+          timerRunning = false;
+          this.textContent = "Start";
+        } else {
+          if (timerSeconds === 0 && timerTarget === 0) {
+            timerTarget = -1; // Count up mode
+          }
+          timerRunning = true;
+          this.textContent = "Pause";
+          timerInterval = setInterval(function () {
+            if (timerTarget > 0) {
+              timerSeconds--;
+              if (timerSeconds <= 0) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                document.getElementById("timer-start").textContent = "Start";
+                timerSeconds = 0;
+                try {
+                  var ctx = new AudioContext();
+                  ctx.resume();
+                  var o = ctx.createOscillator();
+                  o.type = "sine";
+                  o.frequency.value = 880;
+                  var g = ctx.createGain();
+                  g.gain.setValueAtTime(0.3, ctx.currentTime);
+                  g.gain.exponentialRampToValueAtTime(
+                    0.01,
+                    ctx.currentTime + 1,
+                  );
+                  o.connect(g);
+                  g.connect(ctx.destination);
+                  o.start();
+                  o.stop(ctx.currentTime + 1);
+                } catch (e) {}
+              }
+            } else {
+              timerSeconds++;
+            }
+            updateTimerDisplay();
+          }, 1000);
+        }
+        updateTimerDisplay();
+      };
+
+      document.getElementById("timer-reset").onclick = function () {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        timerSeconds = timerTarget > 0 ? timerTarget : 0;
+        document.getElementById("timer-start").textContent = "Start";
+        updateTimerDisplay();
+      };
+
+      // ========== LESSON PLANNER ==========
+      var plannerDate = new Date();
+
+      function getWeekDates(date) {
+        var d = new Date(date);
+        var day = d.getDay();
+        var diff = d.getDate() - day + (day === 0 ? -6 : 1);
+        var monday = new Date(d.setDate(diff));
+        var dates = [];
+        for (var i = 0; i < 7; i++) {
+          var dd = new Date(monday);
+          dd.setDate(monday.getDate() + i);
+          dates.push(dd);
+        }
+        return dates;
+      }
+
+      function renderPlanner() {
+        var dates = getWeekDates(plannerDate);
+        var cal = document.getElementById("planner-calendar");
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+        var monthNames = [
+          "January",
+          "February",
+          "March",
+          "April",
+          "May",
+          "June",
+          "July",
+          "August",
+          "September",
+          "October",
+          "November",
+          "December",
+        ];
+        document.getElementById("planner-month").textContent =
+          monthNames[dates[0].getMonth()] + " " + dates[0].getFullYear();
+        var dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        cal.innerHTML = "";
+        dates.forEach(function (d, i) {
+          var div = document.createElement("div");
+          div.className =
+            "planner-day" + (d.getTime() === today.getTime() ? " today" : "");
+          div.innerHTML =
+            '<div class="planner-day-label">' +
+            dayNames[i] +
+            '</div><div class="planner-day-num">' +
+            d.getDate() +
+            "</div>";
+          div.onclick = function () {
+            plannerDate = d;
+            loadPlannerLessons();
+          };
+          cal.appendChild(div);
+        });
+        loadPlannerLessons();
+      }
+
+      function loadPlannerLessons() {
+        if (!selectedStudent) return;
+        var dates = getWeekDates(plannerDate);
+        var startStr = dates[0].toISOString().split("T")[0];
+        var endStr = dates[6].toISOString().split("T")[0];
+        var lessonsDiv = document.getElementById("planner-lessons");
+        var emptyDiv = document.getElementById("planner-empty");
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("lessons")
+          .orderBy("date", "asc")
+          .get()
+          .then(function (snap) {
+            lessonsDiv.innerHTML = "";
+            var count = 0;
+            snap.forEach(function (doc) {
+              var lesson = doc.data();
+              if (lesson.date >= startStr && lesson.date <= endStr) {
+                count++;
+                var isAdmin = currentUser && currentUser.role === "admin";
+                var deleteBtn = isAdmin
+                  ? '<button class="delete-btn" onclick="deleteLesson(\'' +
+                    doc.id +
+                    "')\">" +
+                    SVG.trash +
+                    "</button>"
+                  : "";
+                var div = document.createElement("div");
+                div.className = "planner-lesson";
+                div.innerHTML =
+                  '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+                  '<div><div class="planner-lesson-time">' +
+                  SVG.calendar +
+                  " " +
+                  lesson.date +
+                  (lesson.time ? " · " + lesson.time : "") +
+                  "</div>" +
+                  '<div class="planner-lesson-title">' +
+                  (lesson.title || "Lesson") +
+                  "</div></div>" +
+                  deleteBtn +
+                  "</div>" +
+                  (lesson.topics
+                    ? '<div class="planner-lesson-topics">' +
+                      lesson.topics
+                        .split(",")
+                        .map(function (t) {
+                          return (
+                            '<span class="log-tag">' + t.trim() + "</span>"
+                          );
+                        })
+                        .join("") +
+                      "</div>"
+                    : "") +
+                  (lesson.notes
+                    ? '<div style="margin-top:8px;font-size:13px;color:var(--text-muted)">' +
+                      lesson.notes +
+                      "</div>"
+                    : "");
+                lessonsDiv.appendChild(div);
+              }
+            });
+            // Mark days with lessons
+            var allDates = [];
+            snap.forEach(function (doc) {
+              allDates.push(doc.data().date);
+            });
+            document
+              .querySelectorAll(".planner-day")
+              .forEach(function (dayEl, idx) {
+                var dateStr = dates[idx].toISOString().split("T")[0];
+                if (allDates.indexOf(dateStr) !== -1) {
+                  dayEl.classList.add("has-lesson");
+                  if (!dayEl.querySelector(".planner-day-dot")) {
+                    var dot = document.createElement("div");
+                    dot.className = "planner-day-dot";
+                    dayEl.appendChild(dot);
+                  }
+                }
+              });
+            if (emptyDiv)
+              emptyDiv.style.display = count === 0 ? "block" : "none";
+          });
+      }
+
+      function deleteLesson(lessonId) {
+        if (!confirm("Delete this lesson?")) return;
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("lessons")
+          .doc(lessonId)
+          .delete()
+          .then(function () {
+            loadPlannerLessons();
+          });
+      }
+
+      document.getElementById("planner-prev").onclick = function () {
+        plannerDate.setDate(plannerDate.getDate() - 7);
+        renderPlanner();
+      };
+      document.getElementById("planner-next").onclick = function () {
+        plannerDate.setDate(plannerDate.getDate() + 7);
+        renderPlanner();
+      };
+
+      document.getElementById("add-lesson-btn").onclick = function () {
+        if (!selectedStudent) {
+          alert("Select a student first");
+          return;
+        }
+        var today = new Date().toISOString().split("T")[0];
+        openModal(
+          "Add Lesson",
+          '<form id="lesson-form">' +
+            '<div class="form-group"><label>Date</label><input type="date" name="date" value="' +
+            today +
+            '" required></div>' +
+            '<div class="form-group"><label>Time</label><input type="time" name="time"></div>' +
+            '<div class="form-group"><label>Title</label><input type="text" name="title" required placeholder="e.g. Colors & Shapes"></div>' +
+            '<div class="form-group"><label>Topics (comma-separated)</label><input type="text" name="topics" placeholder="Colors, Numbers, Shapes"></div>' +
+            '<div class="form-group"><label>Notes</label><textarea name="notes" rows="3" placeholder="Lesson plan notes..."></textarea></div>' +
+            '<button type="submit" class="btn">Add Lesson</button></form>',
+        );
+        document.getElementById("lesson-form").onsubmit = function (e) {
+          e.preventDefault();
+          var form = new FormData(this);
+          db.collection("students")
+            .doc(selectedStudent.id)
+            .collection("lessons")
+            .add({
+              date: form.get("date"),
+              time: form.get("time"),
+              title: form.get("title"),
+              topics: form.get("topics"),
+              notes: form.get("notes"),
+              createdAt: new Date(),
+            })
+            .then(function () {
+              closeModal();
+              loadPlannerLessons();
+            });
+        };
+      };
+
+      // ========== PROGRESS CHARTS ==========
+      function loadProgressCharts() {
+        if (!selectedStudent) return;
+        var panel = document.getElementById("progress-panel");
+        // Remove old charts if any
+        var oldCharts = panel.querySelector(".progress-overview");
+        if (oldCharts) oldCharts.remove();
+        var oldChart = panel.querySelector(".progress-chart");
+        if (oldChart) oldChart.remove();
+
+        // Gather stats from all collections
+        var stats = {
+          vocab: 0,
+          homework: 0,
+          hwDone: 0,
+          lessons: 0,
+          games: 0,
+          classLogs: 0,
+        };
+        var vocabCategories = {};
+        var promises = [];
+
+        promises.push(
+          db
+            .collection("students")
+            .doc(selectedStudent.id)
+            .collection("vocab")
+            .get()
+            .then(function (s) {
+              stats.vocab = s.size;
+              s.forEach(function (d) {
+                var cat = d.data().category || "Other";
+                vocabCategories[cat] = (vocabCategories[cat] || 0) + 1;
+              });
+            }),
+        );
+        promises.push(
+          db
+            .collection("students")
+            .doc(selectedStudent.id)
+            .collection("homework")
+            .get()
+            .then(function (s) {
+              stats.homework = s.size;
+              s.forEach(function (d) {
+                if (d.data().progress >= 100) stats.hwDone++;
+              });
+            }),
+        );
+        promises.push(
+          db
+            .collection("students")
+            .doc(selectedStudent.id)
+            .collection("lessons")
+            .get()
+            .then(function (s) {
+              stats.lessons = s.size;
+            }),
+        );
+        promises.push(
+          db
+            .collection("students")
+            .doc(selectedStudent.id)
+            .collection("games")
+            .get()
+            .then(function (s) {
+              stats.games = s.size;
+            }),
+        );
+        promises.push(
+          db
+            .collection("students")
+            .doc(selectedStudent.id)
+            .collection("classLogs")
+            .get()
+            .then(function (s) {
+              stats.classLogs = s.size;
+            }),
+        );
+
+        Promise.all(promises).then(function () {
+          var list = document.getElementById("progress-list");
+          // Insert overview before items
+          var overview = document.createElement("div");
+          overview.className = "progress-overview";
+          overview.innerHTML =
+            '<div class="progress-stat"><div class="progress-stat-value">' +
+            stats.vocab +
+            '</div><div class="progress-stat-label">Words Learned</div></div>' +
+            '<div class="progress-stat"><div class="progress-stat-value">' +
+            stats.hwDone +
+            "/" +
+            stats.homework +
+            '</div><div class="progress-stat-label">HW Complete</div></div>' +
+            '<div class="progress-stat"><div class="progress-stat-value">' +
+            stats.lessons +
+            '</div><div class="progress-stat-label">Lessons</div></div>' +
+            '<div class="progress-stat"><div class="progress-stat-value">' +
+            stats.classLogs +
+            '</div><div class="progress-stat-label">Classes</div></div>' +
+            '<div class="progress-stat"><div class="progress-stat-value">' +
+            stats.games +
+            '</div><div class="progress-stat-label">Games</div></div>';
+          panel.insertBefore(overview, list);
+
+          // Vocab category bar chart
+          var cats = Object.keys(vocabCategories);
+          if (cats.length > 0) {
+            var maxCat = Math.max.apply(
+              null,
+              cats.map(function (c) {
+                return vocabCategories[c];
+              }),
+            );
+            var chart = document.createElement("div");
+            chart.className = "progress-chart";
+            chart.innerHTML =
+              "<h4>" +
+              SVG.chart +
+              ' Vocabulary by Category</h4><div class="bar-chart">' +
+              cats
+                .map(function (c) {
+                  var pct = Math.round((vocabCategories[c] / maxCat) * 100);
+                  return (
+                    '<div class="bar-chart-col"><div class="bar-chart-bar" style="height:' +
+                    pct +
+                    '%"></div><div class="bar-chart-label">' +
+                    c +
+                    "</div></div>"
+                  );
+                })
+                .join("") +
+              "</div>";
+            panel.insertBefore(chart, list);
+          }
+        });
+      }
+
+      // ========== EXPORT DIAGNOSTICS TO PDF ==========
+      function exportDiagnosticPDF(diagId) {
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("diagnostics")
+          .doc(diagId)
+          .get()
+          .then(function (doc) {
+            var diag = doc.data();
+            if (!diag.sections) {
+              alert("No data to export");
+              return;
+            }
+            var pct = Math.round((diag.totalScore / diag.maxTotalScore) * 100);
+            var text = "DIAGNOSTIC ASSESSMENT REPORT\n";
+            text += "============================\n\n";
+            text += "Student: " + (selectedStudent.name || "") + "\n";
+            text += "Assessment: " + (diag.title || "") + "\n";
+            text +=
+              "Score: " +
+              diag.totalScore +
+              " / " +
+              diag.maxTotalScore +
+              " (" +
+              pct +
+              "%)\n";
+            if (diag.completedAt)
+              text +=
+                "Completed: " +
+                new Date(diag.completedAt.seconds * 1000).toLocaleDateString() +
+                "\n";
+            text += "\n";
+            diag.sections.forEach(function (section) {
+              var secPct = Math.round((section.score / section.maxScore) * 100);
+              text +=
+                "--- " +
+                section.title +
+                " (" +
+                section.score +
+                "/" +
+                section.maxScore +
+                " = " +
+                secPct +
+                "%) ---\n";
+              section.items.forEach(function (item) {
+                var mark =
+                  item.response === "correct"
+                    ? "✓"
+                    : item.response === "partial"
+                      ? "~"
+                      : "✗";
+                text +=
+                  "  " +
+                  mark +
+                  " " +
+                  item.emoji +
+                  " " +
+                  item.portuguese +
+                  " (" +
+                  item.english +
+                  ")\n";
+              });
+              text += "\n";
+            });
+            if (diag.parentNotes)
+              text += "PARENT NOTES:\n" + diag.parentNotes + "\n\n";
+            if (diag.childStrengths)
+              text += "STRENGTHS:\n" + diag.childStrengths + "\n\n";
+            if (diag.areasForImprovement)
+              text +=
+                "AREAS FOR IMPROVEMENT:\n" + diag.areasForImprovement + "\n\n";
+
+            var blob = new Blob([text], { type: "text/plain" });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download =
+              (selectedStudent.name || "student") +
+              "-diagnostic-" +
+              diagId +
+              ".txt";
+            a.click();
+            URL.revokeObjectURL(url);
+          });
+      }
+
+      // ========== DRAG TO REORDER ==========
+      function enableDragReorder(listId, collection) {
+        var list = document.getElementById(listId);
+        if (!list) return;
+        var dragItem = null;
+
+        list.addEventListener("dragstart", function (e) {
+          if (
+            e.target.classList.contains("item-card") ||
+            e.target.classList.contains("vocab-card") ||
+            e.target.classList.contains("homework-card")
+          ) {
+            dragItem = e.target;
+            e.target.classList.add("dragging");
+            e.dataTransfer.effectAllowed = "move";
+          }
+        });
+        list.addEventListener("dragend", function (e) {
+          if (dragItem) {
+            dragItem.classList.remove("dragging");
+            document.querySelectorAll(".drag-over").forEach(function (el) {
+              el.classList.remove("drag-over");
+            });
+            dragItem = null;
+          }
+        });
+        list.addEventListener("dragover", function (e) {
+          e.preventDefault();
+          var target = e.target.closest(
+            ".item-card, .vocab-card, .homework-card",
+          );
+          if (target && target !== dragItem) {
+            document.querySelectorAll(".drag-over").forEach(function (el) {
+              el.classList.remove("drag-over");
+            });
+            target.classList.add("drag-over");
+          }
+        });
+        list.addEventListener("drop", function (e) {
+          e.preventDefault();
+          var target = e.target.closest(
+            ".item-card, .vocab-card, .homework-card",
+          );
+          if (target && dragItem && target !== dragItem) {
+            list.insertBefore(dragItem, target);
+          }
+          document.querySelectorAll(".drag-over").forEach(function (el) {
+            el.classList.remove("drag-over");
+          });
+        });
+      }
+
+      // ========== STUDENT PHOTO AVATARS ==========
+      function setupAvatarUpload() {
+        document.querySelectorAll(".student-item").forEach(function (item) {
+          var avatar = item.querySelector(".student-avatar");
+          if (!avatar) return;
+          avatar.ondblclick = function () {
+            if (currentUser.role !== "admin") return;
+            var input = document.createElement("input");
+            input.type = "file";
+            input.accept = "image/*";
+            input.onchange = function (e) {
+              var file = e.target.files[0];
+              if (!file) return;
+              var reader = new FileReader();
+              reader.onload = function (ev) {
+                var dataUrl = ev.target.result;
+                avatar.style.backgroundImage = "url(" + dataUrl + ")";
+                avatar.classList.add("has-photo");
+                avatar.textContent = "";
+                // Store in localStorage (lightweight approach)
+                var studentName = item.querySelector(".name").textContent;
+                localStorage.setItem("bl_avatar_" + studentName, dataUrl);
+              };
+              reader.readAsDataURL(file);
+            };
+            input.click();
+          };
+        });
+      }
+
+      function loadAvatarPhotos() {
+        document.querySelectorAll(".student-item").forEach(function (item) {
+          var avatar = item.querySelector(".student-avatar");
+          var name = item.querySelector(".name");
+          if (!avatar || !name) return;
+          var stored = localStorage.getItem("bl_avatar_" + name.textContent);
+          if (stored) {
+            avatar.style.backgroundImage = "url(" + stored + ")";
+            avatar.classList.add("has-photo");
+            avatar.textContent = "";
+          }
+        });
+      }
+
+      // ========== GAME TEMPLATE SYSTEM ==========
+      var GAME_TEMPLATES = [
+        {
+          title: "Build Your Car",
+          url: "games/build-your-car/index.html",
+          desc: "Unlock car parts by answering vocab questions",
+        },
+        {
+          title: "Build Your House",
+          url: "games/build-your-house/index.html",
+          desc: "Build a house with correct answers",
+        },
+        {
+          title: "Build Your Rocket",
+          url: "games/build-your-rocket/index.html",
+          desc: "Launch a rocket by learning vocabulary",
+        },
+        {
+          title: "Build Your Robot",
+          url: "games/build-your-robot/index.html",
+          desc: "Assemble a robot with Portuguese words",
+        },
+        {
+          title: "Build Your Dinosaur",
+          url: "games/build-your-dinosaur/index.html",
+          desc: "Create a dinosaur through language practice",
+        },
+      ];
+
+      // Override the add-game-btn to show template picker
+      var origGameBtn = document.getElementById("add-game-btn");
+      if (origGameBtn) {
+        var origHandler = origGameBtn.onclick;
+        origGameBtn.onclick = function () {
+          if (!selectedStudent) {
+            alert("Select a student first");
+            return;
+          }
+          var templatesHtml =
+            '<div style="margin-bottom:16px"><h4 style="margin-bottom:12px">Quick Add from Templates</h4>';
+          GAME_TEMPLATES.forEach(function (t) {
+            templatesHtml +=
+              '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)">' +
+              '<div><div style="font-weight:500;font-size:14px">' +
+              t.title +
+              '</div><div style="font-size:12px;color:var(--text-muted)">' +
+              t.desc +
+              "</div></div>" +
+              '<button class="btn-small" onclick="addGameFromTemplate(\'' +
+              t.title.replace(/'/g, "\\'") +
+              "','" +
+              t.url +
+              "','" +
+              t.desc.replace(/'/g, "\\'") +
+              "')\">" +
+              SVG.play +
+              " Add</button></div>";
+          });
+          templatesHtml +=
+            '</div><hr style="border-color:var(--border);margin:16px 0"><h4 style="margin-bottom:12px">Custom Game</h4>';
+          templatesHtml +=
+            '<form id="item-form"><div class="form-group"><label>Title</label><input type="text" name="title" required></div>' +
+            '<div class="form-group"><label>URL</label><input type="url" name="url" required></div>' +
+            '<div class="form-group"><label>Description</label><input type="text" name="description"></div>' +
+            '<button type="submit" class="btn">Add Custom Game</button></form>';
+          openModal("Add Game", templatesHtml);
+          document.getElementById("item-form").onsubmit = function (e) {
+            e.preventDefault();
+            var form = new FormData(this);
+            db.collection("students")
+              .doc(selectedStudent.id)
+              .collection("games")
+              .add({
+                title: form.get("title"),
+                url: form.get("url"),
+                description: form.get("description"),
+                createdAt: new Date(),
+              })
+              .then(function () {
+                closeModal();
+                loadStudentData();
+              });
+          };
+        };
+      }
+
+      function addGameFromTemplate(title, url, desc) {
+        db.collection("students")
+          .doc(selectedStudent.id)
+          .collection("games")
+          .add({
+            title: title,
+            url: url,
+            description: desc,
+            createdAt: new Date(),
+          })
+          .then(function () {
+            closeModal();
+            loadStudentData();
+          });
+      }
+
+      // ========== NOTES ON ITEMS ==========
+      // Add notes button to item cards (intercept loadStudentData)
+      var _origLoadStudentData = loadStudentData;
+      loadStudentData = function () {
+        _origLoadStudentData();
+        // Load new tabs too
+        loadVocab();
+        loadHomework();
+        renderPlanner();
+        loadProgressCharts();
+        // Enable drag reorder after a short delay for DOM to update
+        setTimeout(function () {
+          enableDragReorder("games-list", "games");
+          enableDragReorder("vocab-list", "vocab");
+          enableDragReorder("homework-list", "homework");
+          // Add draggable attribute to cards
+          document
+            .querySelectorAll(".item-card, .vocab-card, .homework-card")
+            .forEach(function (card) {
+              card.setAttribute("draggable", "true");
+            });
+          // Load avatar photos
+          loadAvatarPhotos();
+          setupAvatarUpload();
+          // Add export buttons to diagnostic cards
+          addExportButtons();
+          // Add notes to item cards
+          addNotesToCards();
+        }, 500);
+      };
+
+      function addExportButtons() {
+        document
+          .querySelectorAll("#diagnostics-list .item-card")
+          .forEach(function (card) {
+            var actions = card.querySelector(".item-actions");
+            if (!actions || actions.querySelector(".export-btn")) return;
+            var viewBtn = actions.querySelector(
+              "button[onclick*='viewDiagnosticResults']",
+            );
+            if (viewBtn) {
+              var diagId = viewBtn.getAttribute("onclick").match(/'([^']+)'/);
+              if (diagId && diagId[1]) {
+                var btn = document.createElement("button");
+                btn.className = "btn-small export-btn";
+                btn.innerHTML = SVG.download + " Export";
+                btn.onclick = function () {
+                  exportDiagnosticPDF(diagId[1]);
+                };
+                actions.appendChild(btn);
+              }
+            }
+          });
+      }
+
+      function addNotesToCards() {
+        document
+          .querySelectorAll(
+            "#games-list .item-card, #tests-list .item-card, #links-list .item-card",
+          )
+          .forEach(function (card) {
+            var actions = card.querySelector(".item-actions");
+            if (!actions || actions.querySelector(".note-btn")) return;
+            var btn = document.createElement("button");
+            btn.className = "btn-small note-btn";
+            btn.innerHTML = SVG.chat + " Note";
+            btn.onclick = function () {
+              var existing = card.querySelector(".item-note");
+              if (existing) {
+                existing.remove();
+                return;
+              }
+              var noteDiv = document.createElement("div");
+              noteDiv.className = "item-note";
+              noteDiv.style.cssText =
+                "margin-top:8px;padding:8px;background:var(--bg-tertiary);border-radius:var(--radius);";
+              noteDiv.innerHTML =
+                '<textarea style="width:100%;padding:6px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:4px;font-family:inherit;font-size:12px;color:var(--text-primary);resize:vertical;min-height:40px;outline:none" placeholder="Add a note..."></textarea>';
+              card.appendChild(noteDiv);
+              noteDiv.querySelector("textarea").focus();
+            };
+            actions.appendChild(btn);
+          });
+      }
+
+      // ========== STUDENT SELF-ACCESS PORTAL ==========
+      // Students see a simplified, friendly view
+      var _origLoginSuccess2 = loginSuccess;
+      loginSuccess = function (username, userData) {
+        _origLoginSuccess2(username, userData);
+        if (userData.role === "student") {
+          // Show vocab and homework tabs for students too
+          document.querySelectorAll(".add-item-card").forEach(function (el) {
+            el.style.display = "none";
+          });
+          // But show homework toggle and vocab search
+          var addVocab = document.getElementById("add-vocab-btn");
+          if (addVocab)
+            addVocab.closest(".add-item-card").style.display = "none";
+          var addHw = document.getElementById("add-homework-btn");
+          if (addHw) addHw.closest(".add-item-card").style.display = "none";
+        }
+      };
     </script>
   </body>
 </html>
