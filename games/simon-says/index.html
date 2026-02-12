@@ -1,0 +1,1656 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎭 Simão Diz! — Simon Says!</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --primary: #7c3aed;
+        --primary-light: #a78bfa;
+        --green: #10b981;
+        --red: #ef4444;
+        --orange: #f59e0b;
+        --blue: #3b82f6;
+        --pink: #ec4899;
+        --bg: #0f0a1a;
+        --card: #1a1128;
+        --card-light: #251b3a;
+      }
+      body {
+        font-family: "Nunito", sans-serif;
+        background: var(--bg);
+        min-height: 100vh;
+        color: white;
+        overflow-x: hidden;
+      }
+      /* ===== PARTICLES ===== */
+      .particles {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        animation: float linear infinite;
+        opacity: 0.2;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 0.3;
+        }
+        90% {
+          opacity: 0.3;
+        }
+        100% {
+          transform: translateY(-10vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      /* ===== SCREENS ===== */
+      .screen {
+        display: none;
+        min-height: 100vh;
+        position: relative;
+        z-index: 1;
+      }
+      .screen.active {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* ===== WELCOME ===== */
+      .welcome-screen {
+        text-align: center;
+        padding: 20px;
+      }
+      .welcome-title {
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-weight: 900;
+        background: linear-gradient(135deg, #a78bfa, #ec4899, #f59e0b);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 8px;
+        animation: pulseTitle 3s ease-in-out infinite;
+      }
+      @keyframes pulseTitle {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+      }
+      .welcome-subtitle {
+        font-size: 1.3rem;
+        color: var(--primary-light);
+        margin-bottom: 32px;
+        font-weight: 600;
+      }
+      .welcome-character {
+        font-size: 8rem;
+        margin: 20px 0;
+        animation: bounce 2s ease-in-out infinite;
+        filter: drop-shadow(0 10px 20px rgba(124, 58, 237, 0.3));
+      }
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+      .start-btn {
+        background: linear-gradient(135deg, var(--primary), var(--pink));
+        color: white;
+        border: none;
+        padding: 20px 60px;
+        font-size: 1.5rem;
+        font-weight: 800;
+        border-radius: 50px;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.3s;
+        box-shadow: 0 8px 30px rgba(124, 58, 237, 0.4);
+        position: relative;
+        overflow: hidden;
+      }
+      .start-btn::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        animation: shimmer 2s infinite;
+      }
+      @keyframes shimmer {
+        0% {
+          left: -100%;
+        }
+        100% {
+          left: 100%;
+        }
+      }
+      .start-btn:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 12px 40px rgba(124, 58, 237, 0.6);
+      }
+      .start-btn:active {
+        transform: translateY(0) scale(0.98);
+      }
+
+      /* ===== TUTORIAL ===== */
+      .tutorial-screen {
+        padding: 20px;
+        text-align: center;
+        max-width: 600px;
+      }
+      .tutorial-card {
+        background: var(--card);
+        border-radius: 24px;
+        padding: 40px 32px;
+        border: 2px solid rgba(167, 139, 250, 0.2);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      }
+      .tutorial-step {
+        display: none;
+        animation: fadeInUp 0.5s ease;
+      }
+      .tutorial-step.active {
+        display: block;
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .tutorial-emoji {
+        font-size: 5rem;
+        margin-bottom: 16px;
+      }
+      .tutorial-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-bottom: 12px;
+        color: var(--primary-light);
+      }
+      .tutorial-text {
+        font-size: 1.1rem;
+        color: #b4a7d6;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+      .tutorial-text strong {
+        color: white;
+      }
+      .tutorial-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 24px;
+      }
+      .tutorial-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--card-light);
+        transition: all 0.3s;
+      }
+      .tutorial-dot.active {
+        background: var(--primary-light);
+        width: 24px;
+        border-radius: 5px;
+      }
+      .tutorial-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 14px 40px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        border-radius: 12px;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+      }
+      .tutorial-btn:hover {
+        background: var(--primary-light);
+        transform: translateY(-2px);
+      }
+
+      /* ===== GAME HUD ===== */
+      .game-screen {
+        padding: 16px;
+        width: 100%;
+        max-width: 700px;
+      }
+      .hud {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+        padding: 12px 20px;
+        background: var(--card);
+        border-radius: 16px;
+        border: 1px solid rgba(167, 139, 250, 0.15);
+      }
+      .hud-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 1rem;
+      }
+      .hud-item .icon {
+        font-size: 1.3rem;
+      }
+      .hud-score {
+        color: var(--orange);
+      }
+      .hud-streak {
+        color: var(--pink);
+      }
+      .hud-round {
+        color: var(--primary-light);
+      }
+      .lives-container {
+        display: flex;
+        gap: 4px;
+      }
+      .life-heart {
+        font-size: 1.3rem;
+        transition: all 0.3s;
+      }
+      .life-heart.lost {
+        filter: grayscale(1);
+        opacity: 0.3;
+        transform: scale(0.8);
+      }
+
+      /* ===== SIMON CHARACTER ===== */
+      .simon-area {
+        background: var(--card);
+        border-radius: 24px;
+        padding: 32px;
+        text-align: center;
+        margin-bottom: 16px;
+        border: 2px solid rgba(167, 139, 250, 0.1);
+        position: relative;
+        overflow: hidden;
+        min-height: 220px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .simon-area::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(124, 58, 237, 0.05) 0%,
+          transparent 60%
+        );
+        animation: rotateBg 20s linear infinite;
+      }
+      @keyframes rotateBg {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .simon-character {
+        font-size: 6rem;
+        position: relative;
+        z-index: 1;
+        transition: all 0.3s;
+        filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+      }
+      .simon-character.speaking {
+        animation: simonSpeak 0.15s ease-in-out infinite alternate;
+      }
+      @keyframes simonSpeak {
+        from {
+          transform: scale(1) rotate(-2deg);
+        }
+        to {
+          transform: scale(1.08) rotate(2deg);
+        }
+      }
+      .simon-bubble {
+        position: relative;
+        z-index: 1;
+        background: rgba(167, 139, 250, 0.15);
+        border: 2px solid rgba(167, 139, 250, 0.3);
+        border-radius: 20px;
+        padding: 16px 28px;
+        margin-top: 16px;
+        max-width: 90%;
+        font-size: 1.3rem;
+        font-weight: 700;
+        line-height: 1.5;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .command-word {
+        display: inline-block;
+        animation: fadeInUp 0.3s ease;
+      }
+      .command-highlight {
+        color: var(--orange);
+        font-size: 1.6rem;
+        display: block;
+        margin-top: 4px;
+      }
+      .command-translation {
+        font-size: 0.95rem;
+        color: #b4a7d6;
+        font-weight: 500;
+        display: block;
+        margin-top: 4px;
+      }
+
+      /* ===== SPEAKER BUTTON ===== */
+      .speaker-btn {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: rgba(167, 139, 250, 0.2);
+        border: 1px solid rgba(167, 139, 250, 0.3);
+        border-radius: 50%;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.3rem;
+        z-index: 2;
+        transition: all 0.2s;
+        color: white;
+      }
+      .speaker-btn:hover {
+        background: rgba(167, 139, 250, 0.4);
+        transform: scale(1.1);
+      }
+      .speaker-btn.playing {
+        animation: speakerPulse 0.5s ease infinite;
+      }
+      @keyframes speakerPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(167, 139, 250, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 0 12px rgba(167, 139, 250, 0);
+        }
+      }
+
+      /* ===== ACTION BUTTONS ===== */
+      .actions-area {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .action-btn {
+        padding: 20px 16px;
+        border-radius: 16px;
+        border: 3px solid transparent;
+        font-size: 1.1rem;
+        font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+      }
+      .action-btn .action-emoji {
+        font-size: 2rem;
+      }
+      .action-btn .action-label {
+        font-size: 1rem;
+        font-weight: 700;
+      }
+      .action-btn .action-hint {
+        font-size: 0.8rem;
+        opacity: 0.7;
+        font-weight: 500;
+      }
+      .action-btn::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.1),
+          transparent
+        );
+        border-radius: 13px;
+      }
+      .action-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      }
+      .action-btn:active {
+        transform: translateY(0) scale(0.97);
+      }
+      .action-btn.bg-green {
+        background: var(--green);
+        border-color: #059669;
+      }
+      .action-btn.bg-red {
+        background: var(--red);
+        border-color: #dc2626;
+      }
+      .action-btn.bg-blue {
+        background: var(--blue);
+        border-color: #2563eb;
+      }
+      .action-btn.bg-orange {
+        background: var(--orange);
+        border-color: #d97706;
+      }
+      .action-btn.bg-pink {
+        background: var(--pink);
+        border-color: #db2777;
+      }
+      .action-btn.bg-purple {
+        background: var(--primary);
+        border-color: #6d28d9;
+      }
+
+      .action-btn.correct-flash {
+        animation: correctFlash 0.6s ease;
+      }
+      @keyframes correctFlash {
+        0% {
+          box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.8);
+        }
+        50% {
+          box-shadow: 0 0 40px 10px rgba(16, 185, 129, 0.4);
+          transform: scale(1.05);
+        }
+        100% {
+          box-shadow: 0 0 0 0 transparent;
+        }
+      }
+      .action-btn.wrong-flash {
+        animation: wrongFlash 0.6s ease;
+      }
+      @keyframes wrongFlash {
+        0% {
+          box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8);
+        }
+        50% {
+          box-shadow: 0 0 40px 10px rgba(239, 68, 68, 0.4);
+          transform: scale(0.95);
+        }
+        100% {
+          box-shadow: 0 0 0 0 transparent;
+        }
+      }
+
+      /* ===== TOASTS ===== */
+      .toast {
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-20px);
+        padding: 14px 28px;
+        border-radius: 50px;
+        font-weight: 800;
+        font-size: 1.2rem;
+        z-index: 300;
+        opacity: 0;
+        transition: all 0.35s cubic-bezier(0.22, 0.9, 0.25, 1);
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      .toast.visible {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      .toast.success {
+        background: linear-gradient(135deg, #10b981, #06b6d4);
+        color: white;
+        box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+      }
+      .toast.error {
+        background: linear-gradient(135deg, #ef4444, #f97316);
+        color: white;
+        box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
+      }
+      .toast.trick {
+        background: linear-gradient(135deg, #f59e0b, #f97316);
+        color: white;
+        box-shadow: 0 8px 30px rgba(245, 158, 11, 0.4);
+      }
+      .toast.info {
+        background: linear-gradient(135deg, var(--primary), var(--pink));
+        color: white;
+        box-shadow: 0 8px 30px rgba(124, 58, 237, 0.4);
+      }
+
+      /* ===== COMBO METER ===== */
+      .combo-display {
+        position: fixed;
+        top: 50%;
+        right: 20px;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        opacity: 0;
+        transition: all 0.3s;
+        z-index: 50;
+      }
+      .combo-display.visible {
+        opacity: 1;
+      }
+      .combo-number {
+        font-size: 2.5rem;
+        font-weight: 900;
+        color: var(--orange);
+        text-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+      }
+      .combo-label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--primary-light);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+      .combo-fire {
+        font-size: 1.5rem;
+        animation: fireBounce 0.5s ease infinite alternate;
+      }
+      @keyframes fireBounce {
+        from {
+          transform: scale(1);
+        }
+        to {
+          transform: scale(1.2);
+        }
+      }
+
+      /* ===== RESULTS ===== */
+      .results-screen {
+        padding: 20px;
+        text-align: center;
+        max-width: 500px;
+      }
+      .results-card {
+        background: var(--card);
+        border-radius: 24px;
+        padding: 40px 32px;
+        border: 2px solid rgba(167, 139, 250, 0.2);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      }
+      .results-emoji {
+        font-size: 5rem;
+        margin-bottom: 12px;
+      }
+      .results-title {
+        font-size: 2rem;
+        font-weight: 900;
+        margin-bottom: 8px;
+      }
+      .results-subtitle {
+        color: #b4a7d6;
+        margin-bottom: 24px;
+        font-size: 1.1rem;
+      }
+      .results-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .stat-box {
+        background: var(--card-light);
+        border-radius: 12px;
+        padding: 16px 8px;
+      }
+      .stat-value {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: var(--orange);
+      }
+      .stat-label {
+        font-size: 0.8rem;
+        color: #b4a7d6;
+        margin-top: 4px;
+      }
+      .results-stars {
+        font-size: 2.5rem;
+        margin: 16px 0;
+        letter-spacing: 8px;
+      }
+      .words-learned {
+        background: var(--card-light);
+        border-radius: 12px;
+        padding: 16px;
+        margin: 16px 0;
+        text-align: left;
+      }
+      .words-learned h3 {
+        font-size: 0.95rem;
+        color: var(--primary-light);
+        margin-bottom: 8px;
+      }
+      .word-chip {
+        display: inline-block;
+        background: rgba(167, 139, 250, 0.15);
+        border: 1px solid rgba(167, 139, 250, 0.2);
+        border-radius: 8px;
+        padding: 4px 10px;
+        margin: 3px;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+      .play-again-btn {
+        background: linear-gradient(135deg, var(--primary), var(--pink));
+        color: white;
+        border: none;
+        padding: 16px 48px;
+        font-size: 1.2rem;
+        font-weight: 800;
+        border-radius: 50px;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+        margin-top: 8px;
+      }
+      .play-again-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(124, 58, 237, 0.4);
+      }
+
+      /* ===== CONFETTI ===== */
+      .confetti-piece {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        z-index: 400;
+        animation: confettiFall linear forwards;
+      }
+      @keyframes confettiFall {
+        0% {
+          transform: translateY(-10vh) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(110vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      /* ===== RESPONSIVE ===== */
+      @media (max-width: 600px) {
+        .hud {
+          padding: 8px 12px;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .simon-area {
+          padding: 20px;
+          min-height: 180px;
+        }
+        .simon-character {
+          font-size: 4rem;
+        }
+        .simon-bubble {
+          font-size: 1.1rem;
+          padding: 12px 20px;
+        }
+        .action-btn {
+          padding: 14px 10px;
+        }
+        .action-btn .action-emoji {
+          font-size: 1.5rem;
+        }
+        .combo-display {
+          display: none;
+        }
+        .results-stats {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Particles BG -->
+    <div class="particles" id="particles"></div>
+
+    <!-- ===== WELCOME SCREEN ===== -->
+    <div class="screen welcome-screen active" id="screen-welcome">
+      <div class="welcome-title">🎭 Simão Diz!</div>
+      <div class="welcome-subtitle">Simon Says — Portuguese Edition!</div>
+      <div class="welcome-character">🧙‍♂️</div>
+      <p
+        style="
+          color: #b4a7d6;
+          margin-bottom: 32px;
+          font-size: 1.05rem;
+          max-width: 400px;
+          line-height: 1.6;
+        "
+      >
+        O Simão é um feiticeiro que dá ordens em Português!<br />
+        <span style="color: #8b7eae"
+          >Simon is a wizard who gives commands in Portuguese!</span
+        >
+      </p>
+      <button class="start-btn" onclick="showTutorial()">
+        🎮 Começar! / Start!
+      </button>
+    </div>
+
+    <!-- ===== TUTORIAL SCREEN ===== -->
+    <div class="screen tutorial-screen" id="screen-tutorial">
+      <div class="tutorial-card">
+        <div class="tutorial-step active" data-step="0">
+          <div class="tutorial-emoji">👂</div>
+          <div class="tutorial-title">Ouve o Simão!</div>
+          <div class="tutorial-text">
+            O Simão diz uma ordem em <strong>Português</strong>.<br />
+            <em>Simon gives a command in Portuguese.</em><br /><br />
+            Podes clicar no 🔊 para ouvir outra vez!<br />
+            <em>Click 🔊 to hear it again!</em>
+          </div>
+        </div>
+        <div class="tutorial-step" data-step="1">
+          <div class="tutorial-emoji">✅</div>
+          <div class="tutorial-title">Faz a ação certa!</div>
+          <div class="tutorial-text">
+            Se o Simão diz <strong>"Simão diz: salta!"</strong>,<br />
+            clica no botão <strong>🦘 Salta!</strong><br /><br />
+            <em
+              >If Simon says "Simon says: jump!",<br />click the Jump
+              button!</em
+            >
+          </div>
+        </div>
+        <div class="tutorial-step" data-step="2">
+          <div class="tutorial-emoji">⚠️</div>
+          <div class="tutorial-title">Cuidado com os truques!</div>
+          <div class="tutorial-text">
+            Se ele <strong>NÃO diz "Simão diz"</strong>,<br />
+            fica parado! Clica <strong>🚫 Não faz nada!</strong><br /><br />
+            <em
+              >If he DOESN'T say "Simon says",<br />don't move! Click "Do
+              nothing!"</em
+            >
+          </div>
+        </div>
+        <div class="tutorial-step" data-step="3">
+          <div class="tutorial-emoji">🏆</div>
+          <div class="tutorial-title">Ganha pontos!</div>
+          <div class="tutorial-text">
+            Respostas rápidas = <strong>mais pontos</strong>!<br />
+            Combos seguidos = <strong>bónus</strong>! 🔥<br />
+            Tens <strong>3 vidas</strong> ❤️❤️❤️<br /><br />
+            <em>Fast answers = more points!<br />Combos = bonus! 3 lives!</em>
+          </div>
+        </div>
+        <div class="tutorial-dots" id="tutorial-dots">
+          <div class="tutorial-dot active"></div>
+          <div class="tutorial-dot"></div>
+          <div class="tutorial-dot"></div>
+          <div class="tutorial-dot"></div>
+        </div>
+        <button
+          class="tutorial-btn"
+          id="tutorial-btn"
+          onclick="nextTutorialStep()"
+        >
+          Próximo → / Next →
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== GAME SCREEN ===== -->
+    <div class="screen game-screen" id="screen-game">
+      <!-- HUD -->
+      <div class="hud">
+        <div class="hud-item hud-score">
+          <span class="icon">⭐</span>
+          <span id="hud-score">0</span>
+        </div>
+        <div class="hud-item">
+          <div class="lives-container" id="lives">
+            <span class="life-heart">❤️</span>
+            <span class="life-heart">❤️</span>
+            <span class="life-heart">❤️</span>
+          </div>
+        </div>
+        <div class="hud-item hud-round">
+          <span class="icon">🎯</span>
+          <span id="hud-round">1/15</span>
+        </div>
+      </div>
+
+      <!-- Simon Character Area -->
+      <div class="simon-area" id="simon-area">
+        <button
+          class="speaker-btn"
+          id="speaker-btn"
+          onclick="replayVoice()"
+          title="Ouvir outra vez / Hear again"
+        >
+          🔊
+        </button>
+        <div class="simon-character" id="simon-char">🧙‍♂️</div>
+        <div class="simon-bubble" id="simon-bubble">
+          <span id="bubble-text">...</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions-area" id="actions-area">
+        <!-- Dynamically populated -->
+      </div>
+    </div>
+
+    <!-- ===== RESULTS SCREEN ===== -->
+    <div class="screen results-screen" id="screen-results">
+      <div class="results-card">
+        <div class="results-emoji" id="results-emoji">🎉</div>
+        <div class="results-title" id="results-title">Muito Bem!</div>
+        <div class="results-subtitle" id="results-subtitle">
+          Great job playing!
+        </div>
+        <div class="results-stars" id="results-stars">⭐⭐⭐</div>
+        <div class="results-stats">
+          <div class="stat-box">
+            <div class="stat-value" id="stat-score">0</div>
+            <div class="stat-label">Pontos / Points</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="stat-correct">0</div>
+            <div class="stat-label">Corretos / Correct</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="stat-streak">0</div>
+            <div class="stat-label">Melhor combo</div>
+          </div>
+        </div>
+        <div class="words-learned" id="words-learned">
+          <h3>📚 Palavras Aprendidas / Words Learned</h3>
+          <div id="words-list"></div>
+        </div>
+        <button class="play-again-btn" onclick="restartGame()">
+          🔄 Jogar Outra Vez / Play Again
+        </button>
+      </div>
+    </div>
+
+    <!-- Toasts -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Combo Display -->
+    <div class="combo-display" id="combo-display">
+      <div class="combo-fire">🔥</div>
+      <div class="combo-number" id="combo-number">2</div>
+      <div class="combo-label">COMBO</div>
+    </div>
+
+    <script>
+      // ===== GAME DATA =====
+      const COMMANDS = [
+        // Body actions
+        {
+          action: "jump",
+          pt: "Salta!",
+          en: "Jump!",
+          emoji: "🦘",
+          color: "bg-green",
+        },
+        {
+          action: "clap",
+          pt: "Bate palmas!",
+          en: "Clap!",
+          emoji: "👏",
+          color: "bg-blue",
+        },
+        {
+          action: "dance",
+          pt: "Dança!",
+          en: "Dance!",
+          emoji: "💃",
+          color: "bg-pink",
+        },
+        {
+          action: "sit",
+          pt: "Senta-te!",
+          en: "Sit down!",
+          emoji: "🪑",
+          color: "bg-orange",
+        },
+        {
+          action: "spin",
+          pt: "Roda!",
+          en: "Spin!",
+          emoji: "🌀",
+          color: "bg-purple",
+        },
+        {
+          action: "wave",
+          pt: "Acena!",
+          en: "Wave!",
+          emoji: "👋",
+          color: "bg-blue",
+        },
+        // Sounds / mouth
+        {
+          action: "laugh",
+          pt: "Ri-te!",
+          en: "Laugh!",
+          emoji: "😂",
+          color: "bg-orange",
+        },
+        {
+          action: "sing",
+          pt: "Canta!",
+          en: "Sing!",
+          emoji: "🎤",
+          color: "bg-pink",
+        },
+        {
+          action: "whisper",
+          pt: "Sussurra!",
+          en: "Whisper!",
+          emoji: "🤫",
+          color: "bg-purple",
+        },
+        // Objects
+        {
+          action: "touch_nose",
+          pt: "Toca no nariz!",
+          en: "Touch your nose!",
+          emoji: "👃",
+          color: "bg-green",
+        },
+        {
+          action: "close_eyes",
+          pt: "Fecha os olhos!",
+          en: "Close your eyes!",
+          emoji: "😌",
+          color: "bg-blue",
+        },
+        {
+          action: "raise_hand",
+          pt: "Levanta a mão!",
+          en: "Raise your hand!",
+          emoji: "✋",
+          color: "bg-orange",
+        },
+        {
+          action: "stomp",
+          pt: "Bate o pé!",
+          en: "Stomp!",
+          emoji: "🦶",
+          color: "bg-red",
+        },
+        {
+          action: "fly",
+          pt: "Voa!",
+          en: "Fly!",
+          emoji: "🦅",
+          color: "bg-purple",
+        },
+        {
+          action: "freeze",
+          pt: "Congela!",
+          en: "Freeze!",
+          emoji: "🧊",
+          color: "bg-blue",
+        },
+        {
+          action: "run",
+          pt: "Corre!",
+          en: "Run!",
+          emoji: "🏃",
+          color: "bg-green",
+        },
+        {
+          action: "stretch",
+          pt: "Estica-te!",
+          en: "Stretch!",
+          emoji: "🧘",
+          color: "bg-pink",
+        },
+        {
+          action: "blow",
+          pt: "Sopra!",
+          en: "Blow!",
+          emoji: "🌬️",
+          color: "bg-purple",
+        },
+      ];
+
+      // ===== GAME STATE =====
+      let score = 0;
+      let lives = 3;
+      let round = 0;
+      let totalRounds = 15;
+      let streak = 0;
+      let bestStreak = 0;
+      let correctCount = 0;
+      let currentCommand = null;
+      let isSimonSays = true;
+      let answered = false;
+      let tutorialStep = 0;
+      let wordsEncountered = new Set();
+      let commandTimeout = null;
+      let lastVoiceText = "";
+
+      // ===== PARTICLES =====
+      function createParticles() {
+        const container = document.getElementById("particles");
+        const colors = ["#A78BFA", "#EC4899", "#F59E0B", "#10B981", "#3B82F6"];
+        for (let i = 0; i < 30; i++) {
+          const p = document.createElement("div");
+          p.className = "particle";
+          p.style.left = Math.random() * 100 + "%";
+          p.style.width = p.style.height = 4 + Math.random() * 8 + "px";
+          p.style.background =
+            colors[Math.floor(Math.random() * colors.length)];
+          p.style.animationDuration = 8 + Math.random() * 15 + "s";
+          p.style.animationDelay = Math.random() * 10 + "s";
+          container.appendChild(p);
+        }
+      }
+      createParticles();
+
+      // ===== SCREEN MANAGEMENT =====
+      function showScreen(id) {
+        document
+          .querySelectorAll(".screen")
+          .forEach((s) => s.classList.remove("active"));
+        document.getElementById("screen-" + id).classList.add("active");
+      }
+
+      // ===== TUTORIAL =====
+      function showTutorial() {
+        tutorialStep = 0;
+        showScreen("tutorial");
+        updateTutorial();
+      }
+
+      function updateTutorial() {
+        document
+          .querySelectorAll(".tutorial-step")
+          .forEach((s) => s.classList.remove("active"));
+        document
+          .querySelectorAll(".tutorial-step")
+          [tutorialStep].classList.add("active");
+        document.querySelectorAll(".tutorial-dot").forEach((d, i) => {
+          d.classList.toggle("active", i === tutorialStep);
+        });
+        const btn = document.getElementById("tutorial-btn");
+        if (tutorialStep === 3) {
+          btn.textContent = "🎮 Jogar! / Play!";
+        } else {
+          btn.textContent = "Próximo → / Next →";
+        }
+      }
+
+      function nextTutorialStep() {
+        if (tutorialStep < 3) {
+          tutorialStep++;
+          updateTutorial();
+        } else {
+          startGame();
+        }
+      }
+
+      // ===== VOICE (Text-to-Speech) =====
+      function speak(text, callback) {
+        if (!("speechSynthesis" in window)) {
+          if (callback) callback();
+          return;
+        }
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = "pt-PT";
+        utter.rate = 0.85;
+        utter.pitch = 1.1;
+        utter.volume = 1;
+
+        // Try to find a Portuguese voice
+        const voices = window.speechSynthesis.getVoices();
+        const ptVoice = voices.find((v) => v.lang.startsWith("pt"));
+        if (ptVoice) utter.voice = ptVoice;
+
+        lastVoiceText = text;
+
+        const simon = document.getElementById("simon-char");
+        if (simon) simon.classList.add("speaking");
+
+        utter.onend = function () {
+          if (simon) simon.classList.remove("speaking");
+          if (callback) callback();
+        };
+        utter.onerror = function () {
+          if (simon) simon.classList.remove("speaking");
+          if (callback) callback();
+        };
+        window.speechSynthesis.speak(utter);
+      }
+
+      function replayVoice() {
+        if (lastVoiceText) {
+          const btn = document.getElementById("speaker-btn");
+          btn.classList.add("playing");
+          speak(lastVoiceText, function () {
+            btn.classList.remove("playing");
+          });
+        }
+      }
+
+      // Ensure voices are loaded
+      if ("speechSynthesis" in window) {
+        speechSynthesis.getVoices();
+        speechSynthesis.onvoiceschanged = function () {
+          speechSynthesis.getVoices();
+        };
+      }
+
+      // ===== SOUNDS (WebAudio) =====
+      function playSound(type) {
+        try {
+          const ctx = new AudioContext();
+          ctx.resume();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          if (type === "correct") {
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(523, ctx.currentTime);
+            osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+            osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.4);
+          } else if (type === "wrong") {
+            osc.type = "sawtooth";
+            osc.frequency.setValueAtTime(300, ctx.currentTime);
+            osc.frequency.linearRampToValueAtTime(150, ctx.currentTime + 0.3);
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.4);
+          } else if (type === "combo") {
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(784, ctx.currentTime);
+            osc.frequency.setValueAtTime(988, ctx.currentTime + 0.08);
+            osc.frequency.setValueAtTime(1175, ctx.currentTime + 0.16);
+            osc.frequency.setValueAtTime(1318, ctx.currentTime + 0.24);
+            gain.gain.setValueAtTime(0.25, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.5);
+          } else if (type === "gameOver") {
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(440, ctx.currentTime);
+            osc.frequency.linearRampToValueAtTime(220, ctx.currentTime + 0.3);
+            osc.frequency.linearRampToValueAtTime(165, ctx.currentTime + 0.6);
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.8);
+          } else if (type === "victory") {
+            // Play fanfare
+            [523, 659, 784, 1047].forEach(function (freq, i) {
+              const o = ctx.createOscillator();
+              const g = ctx.createGain();
+              o.type = "sine";
+              o.connect(g);
+              g.connect(ctx.destination);
+              o.frequency.value = freq;
+              g.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.15);
+              g.gain.exponentialRampToValueAtTime(
+                0.01,
+                ctx.currentTime + i * 0.15 + 0.4,
+              );
+              o.start(ctx.currentTime + i * 0.15);
+              o.stop(ctx.currentTime + i * 0.15 + 0.4);
+            });
+            return; // Multiple oscillators, skip osc stop below
+          }
+        } catch (e) {
+          /* ignore audio errors */
+        }
+      }
+
+      // ===== TOAST =====
+      function showToast(text, type) {
+        const t = document.getElementById("toast");
+        t.className = "toast " + type;
+        t.textContent = text;
+        requestAnimationFrame(function () {
+          t.classList.add("visible");
+        });
+        setTimeout(function () {
+          t.classList.remove("visible");
+        }, 1800);
+      }
+
+      // ===== COMBO =====
+      function updateCombo() {
+        const el = document.getElementById("combo-display");
+        if (streak >= 2) {
+          el.classList.add("visible");
+          document.getElementById("combo-number").textContent = streak + "x";
+        } else {
+          el.classList.remove("visible");
+        }
+      }
+
+      // ===== CONFETTI =====
+      function spawnConfetti(count) {
+        const colors = [
+          "#A78BFA",
+          "#EC4899",
+          "#F59E0B",
+          "#10B981",
+          "#3B82F6",
+          "#EF4444",
+        ];
+        for (let i = 0; i < count; i++) {
+          const c = document.createElement("div");
+          c.className = "confetti-piece";
+          c.style.left = Math.random() * 100 + "%";
+          c.style.background =
+            colors[Math.floor(Math.random() * colors.length)];
+          c.style.animationDuration = 1.5 + Math.random() * 2 + "s";
+          c.style.animationDelay = Math.random() * 0.5 + "s";
+          c.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+          c.style.width = 6 + Math.random() * 8 + "px";
+          c.style.height = 6 + Math.random() * 8 + "px";
+          document.body.appendChild(c);
+          setTimeout(function () {
+            c.remove();
+          }, 4000);
+        }
+      }
+
+      // ===== START GAME =====
+      function startGame() {
+        score = 0;
+        lives = 3;
+        round = 0;
+        streak = 0;
+        bestStreak = 0;
+        correctCount = 0;
+        wordsEncountered = new Set();
+        updateHUD();
+        updateCombo();
+        showScreen("game");
+        nextRound();
+      }
+
+      function restartGame() {
+        showScreen("welcome");
+      }
+
+      // ===== HUD =====
+      function updateHUD() {
+        document.getElementById("hud-score").textContent = score;
+        document.getElementById("hud-round").textContent =
+          round + "/" + totalRounds;
+        const hearts = document.querySelectorAll(".life-heart");
+        hearts.forEach(function (h, i) {
+          h.classList.toggle("lost", i >= lives);
+        });
+      }
+
+      // ===== NEXT ROUND =====
+      function nextRound() {
+        if (round >= totalRounds || lives <= 0) {
+          endGame();
+          return;
+        }
+        round++;
+        answered = false;
+        updateHUD();
+
+        // Pick random command
+        currentCommand = COMMANDS[Math.floor(Math.random() * COMMANDS.length)];
+        wordsEncountered.add(currentCommand.pt);
+
+        // 70% chance of "Simão diz:" prefix, 30% trick
+        isSimonSays = Math.random() < 0.7;
+
+        // Build the spoken text
+        var spokenText = isSimonSays
+          ? "Simão diz: " + currentCommand.pt
+          : currentCommand.pt;
+
+        // Show in bubble
+        var bubbleHTML = "";
+        if (isSimonSays) {
+          bubbleHTML =
+            '<span class="command-word">Simão diz:</span><br>' +
+            '<span class="command-highlight">' +
+            currentCommand.emoji +
+            " " +
+            currentCommand.pt +
+            "</span>" +
+            '<span class="command-translation">' +
+            currentCommand.en +
+            "</span>";
+        } else {
+          bubbleHTML =
+            '<span class="command-highlight">' +
+            currentCommand.emoji +
+            " " +
+            currentCommand.pt +
+            "</span>" +
+            '<span class="command-translation">' +
+            currentCommand.en +
+            "</span>";
+        }
+        document.getElementById("bubble-text").innerHTML = bubbleHTML;
+
+        // Speak
+        speak(spokenText);
+
+        // Build action buttons
+        buildActionButtons();
+      }
+
+      // ===== BUILD BUTTONS =====
+      function buildActionButtons() {
+        var area = document.getElementById("actions-area");
+        area.innerHTML = "";
+
+        // We need: the correct action, 2 distractors, and "do nothing"
+        var options = [currentCommand];
+        var pool = COMMANDS.filter(function (c) {
+          return c.action !== currentCommand.action;
+        });
+        shuffle(pool);
+        options.push(pool[0], pool[1]);
+        shuffle(options);
+
+        // Add the 3 action options
+        options.forEach(function (cmd) {
+          var btn = document.createElement("button");
+          btn.className = "action-btn " + cmd.color;
+          btn.innerHTML =
+            '<span class="action-emoji">' +
+            cmd.emoji +
+            "</span>" +
+            '<span class="action-label">' +
+            cmd.pt +
+            "</span>" +
+            '<span class="action-hint">' +
+            cmd.en +
+            "</span>";
+          btn.onclick = function () {
+            handleAnswer(cmd.action);
+          };
+          area.appendChild(btn);
+        });
+
+        // Add "Do nothing" button
+        var nothingBtn = document.createElement("button");
+        nothingBtn.className = "action-btn bg-red";
+        nothingBtn.innerHTML =
+          '<span class="action-emoji">🚫</span>' +
+          '<span class="action-label">Não faz nada!</span>' +
+          '<span class="action-hint">Do nothing!</span>';
+        nothingBtn.onclick = function () {
+          handleAnswer("nothing");
+        };
+        area.appendChild(nothingBtn);
+      }
+
+      // ===== HANDLE ANSWER =====
+      function handleAnswer(action) {
+        if (answered) return;
+        answered = true;
+
+        var isCorrect = false;
+
+        if (isSimonSays) {
+          // Must do the correct action
+          isCorrect = action === currentCommand.action;
+        } else {
+          // Trick! Must do nothing
+          isCorrect = action === "nothing";
+        }
+
+        // Find clicked button
+        var btns = document.querySelectorAll(".action-btn");
+
+        if (isCorrect) {
+          // Correct answer
+          correctCount++;
+          streak++;
+          if (streak > bestStreak) bestStreak = streak;
+
+          // Points: base 100 + speed bonus + streak bonus
+          var points = 100 + (streak > 1 ? streak * 25 : 0);
+          score += points;
+
+          // Flash correct
+          btns.forEach(function (b) {
+            if (
+              (isSimonSays &&
+                b.querySelector(".action-label") &&
+                b.querySelector(".action-label").textContent ===
+                  currentCommand.pt) ||
+              (!isSimonSays &&
+                b.querySelector(".action-label") &&
+                b.querySelector(".action-label").textContent ===
+                  "Não faz nada!")
+            ) {
+              b.classList.add("correct-flash");
+            }
+          });
+
+          try {
+            playSound(streak >= 3 ? "combo" : "correct");
+          } catch (e) {}
+
+          if (!isSimonSays) {
+            showToast("🎯 Truque evitado! +" + points, "trick");
+          } else {
+            showToast("✅ Correto! +" + points, "success");
+          }
+
+          if (streak >= 3) {
+            spawnConfetti(8);
+          }
+        } else {
+          // Wrong answer
+          lives--;
+          streak = 0;
+
+          btns.forEach(function (b) {
+            if (b.querySelector(".action-label")) {
+              var label = b.querySelector(".action-label").textContent;
+              if (
+                (isSimonSays && label === currentCommand.pt) ||
+                (!isSimonSays && label === "Não faz nada!")
+              ) {
+                b.classList.add("correct-flash");
+              }
+            }
+          });
+
+          // Find the button the user clicked
+          btns.forEach(function (b) {
+            var label = b.querySelector(".action-label");
+            if (label) {
+              if (
+                (action === "nothing" &&
+                  label.textContent === "Não faz nada!") ||
+                COMMANDS.some(function (c) {
+                  return c.action === action && c.pt === label.textContent;
+                })
+              ) {
+                b.classList.add("wrong-flash");
+              }
+            }
+          });
+
+          try {
+            playSound("wrong");
+          } catch (e) {}
+
+          if (!isSimonSays) {
+            showToast("😬 O Simão não disse! / Simon didn't say!", "error");
+          } else {
+            showToast("❌ Ação errada! / Wrong action!", "error");
+          }
+        }
+
+        updateCombo();
+        updateHUD();
+
+        // Disable all buttons
+        btns.forEach(function (b) {
+          b.style.pointerEvents = "none";
+        });
+
+        // Next round after delay
+        setTimeout(function () {
+          nextRound();
+        }, 2000);
+      }
+
+      // ===== END GAME =====
+      function endGame() {
+        showScreen("results");
+
+        var emoji, title, subtitle;
+        var stars;
+
+        if (lives <= 0) {
+          // Game over
+          emoji = "💀";
+          title = "Fim do Jogo!";
+          subtitle = "Game Over! Tenta outra vez!";
+          stars = correctCount >= 10 ? 2 : correctCount >= 5 ? 1 : 0;
+          try {
+            playSound("gameOver");
+          } catch (e) {}
+        } else {
+          var pct = correctCount / totalRounds;
+          if (pct >= 0.9) {
+            emoji = "🏆";
+            title = "Incrível! / Amazing!";
+            subtitle = "O Simão está impressionado!";
+            stars = 5;
+          } else if (pct >= 0.7) {
+            emoji = "🎉";
+            title = "Muito Bem! / Great job!";
+            subtitle = "Quase perfeito!";
+            stars = 4;
+          } else if (pct >= 0.5) {
+            emoji = "👏";
+            title = "Bom trabalho! / Good work!";
+            subtitle = "Continua a praticar!";
+            stars = 3;
+          } else {
+            emoji = "💪";
+            title = "Boa tentativa! / Nice try!";
+            subtitle = "Pratica mais e vais melhorar!";
+            stars = 2;
+          }
+          try {
+            playSound("victory");
+          } catch (e) {}
+          spawnConfetti(40);
+        }
+
+        document.getElementById("results-emoji").textContent = emoji;
+        document.getElementById("results-title").textContent = title;
+        document.getElementById("results-subtitle").textContent = subtitle;
+        document.getElementById("results-stars").textContent =
+          "⭐".repeat(stars) + "☆".repeat(5 - stars);
+        document.getElementById("stat-score").textContent = score;
+        document.getElementById("stat-correct").textContent =
+          correctCount + "/" + totalRounds;
+        document.getElementById("stat-streak").textContent = bestStreak + "x";
+
+        // Words learned
+        var wordsList = document.getElementById("words-list");
+        wordsList.innerHTML = "";
+        wordsEncountered.forEach(function (w) {
+          var chip = document.createElement("span");
+          chip.className = "word-chip";
+          chip.textContent = w;
+          wordsList.appendChild(chip);
+        });
+      }
+
+      // ===== HELPERS =====
+      function shuffle(arr) {
+        for (var i = arr.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = temp;
+        }
+        return arr;
+      }
+    </script>
+  </body>
+</html>
