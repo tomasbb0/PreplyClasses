@@ -791,6 +791,83 @@
         transform: scale(1.1);
       }
 
+      /* ===== TAB VISIBILITY EYE ICON ===== */
+      .tab-eye-btn {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border: none;
+        background: transparent;
+        border-radius: 6px;
+        cursor: pointer;
+        color: var(--text-muted);
+        padding: 0;
+        margin-left: auto;
+        flex-shrink: 0;
+        opacity: 0;
+        transition: opacity 0.15s, color 0.15s, background 0.15s;
+      }
+      .admin-mode .tab-eye-btn {
+        display: flex;
+      }
+      .nav-tab:hover .tab-eye-btn,
+      .nav-tab .tab-eye-btn.tab-hidden {
+        opacity: 1;
+      }
+      .tab-eye-btn:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+      }
+      .tab-eye-btn svg {
+        width: 14px !important;
+        height: 14px !important;
+        flex-shrink: 0;
+      }
+      .tab-eye-btn.tab-hidden {
+        color: var(--text-muted);
+        opacity: 0.7;
+      }
+      .nav-tab.tab-is-hidden {
+        opacity: 0.35;
+      }
+      .nav-tab.tab-is-hidden:hover {
+        opacity: 0.6;
+      }
+
+      .tab-filter-row {
+        display: none;
+        gap: 4px;
+        margin-bottom: 8px;
+        padding: 0 4px;
+      }
+      .admin-mode .tab-filter-row {
+        display: flex;
+      }
+      .tab-filter-btn {
+        flex: 1;
+        padding: 4px 0;
+        font-size: 11px;
+        font-weight: 600;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: transparent;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.15s;
+      }
+      .tab-filter-btn:hover {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+      }
+      .tab-filter-btn.active {
+        background: var(--bg-active);
+        color: var(--text-primary);
+        border-color: var(--text-muted);
+      }
+
       /* ===== MAIN PANEL ===== */
       .main-panel {
         flex: 1;
@@ -2938,30 +3015,10 @@
             </div>
           </div>
           <div id="student-nav" class="nav-tabs hidden">
-            <div
-              id="tab-settings-row"
-              style="display: none; margin-bottom: 8px; text-align: right"
-            >
-              <button
-                class="btn-small"
-                onclick="openTabSettings()"
-                style="font-size: 11px; padding: 4px 10px"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  width="12"
-                  height="12"
-                  stroke="currentColor"
-                  fill="none"
-                  stroke-width="1.5"
-                >
-                  <path
-                    d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.528-.738a1.125 1.125 0 0 1 .12-1.45l.774-.773a1.125 1.125 0 0 1 1.449-.12l.738.527c.35.25.806.272 1.203.107.397-.165.71-.505.781-.929l.149-.894Z"
-                  />
-                  <path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
-                Tabs
-              </button>
+            <div class="tab-filter-row" id="tab-filter-row">
+              <button class="tab-filter-btn active" data-filter="all" onclick="filterAdminTabs('all')">All</button>
+              <button class="tab-filter-btn" data-filter="visible" onclick="filterAdminTabs('visible')">👁 Visible</button>
+              <button class="tab-filter-btn" data-filter="hidden" onclick="filterAdminTabs('hidden')">🚫 Hidden</button>
             </div>
             <button class="nav-tab active" data-tab="diagnostics">
               <svg viewBox="0 0 24 24">
@@ -2973,6 +3030,7 @@
                 />
               </svg>
               Diagnostics
+              <span class="tab-eye-btn" onclick="event.stopPropagation(); toggleTabEye('diagnostics')" title="Toggle visibility"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg></span>
             </button>
             <button class="nav-tab" data-tab="games">
               <svg viewBox="0 0 24 24">
@@ -2981,6 +3039,7 @@
                 />
               </svg>
               Games
+              <span class="tab-eye-btn" onclick="event.stopPropagation(); toggleTabEye('games')" title="Toggle visibility"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg></span>
             </button>
             <button class="nav-tab" data-tab="tests">
               <svg viewBox="0 0 24 24">
@@ -2992,6 +3051,7 @@
                 />
               </svg>
               Tests
+              <span class="tab-eye-btn" onclick="event.stopPropagation(); toggleTabEye('tests')" title="Toggle visibility"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg></span>
             </button>
             <button class="nav-tab" data-tab="links">
               <svg viewBox="0 0 24 24">
@@ -3002,6 +3062,7 @@
                 />
               </svg>
               Links
+              <span class="tab-eye-btn" onclick="event.stopPropagation(); toggleTabEye('links')" title="Toggle visibility"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg></span>
             </button>
             <button class="nav-tab" data-tab="progress">
               <svg viewBox="0 0 24 24">
@@ -3010,6 +3071,7 @@
                 />
               </svg>
               Progress
+              <span class="tab-eye-btn" onclick="event.stopPropagation(); toggleTabEye('progress')" title="Toggle visibility"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg></span>
             </button>
             <button class="nav-tab" data-tab="classlog">
               <svg viewBox="0 0 24 24">
@@ -3023,6 +3085,7 @@
                 />
               </svg>
               Class Log
+              <span class="tab-eye-btn" onclick="event.stopPropagation(); toggleTabEye('classlog')" title="Toggle visibility"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg></span>
             </button>
             <button class="nav-tab" data-tab="vocab">
               <svg viewBox="0 0 24 24">
@@ -3037,6 +3100,7 @@
                 />
               </svg>
               Vocab Bank
+              <span class="tab-eye-btn" onclick="event.stopPropagation(); toggleTabEye('vocab')" title="Toggle visibility"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg></span>
             </button>
             <button class="nav-tab" data-tab="homework">
               <svg viewBox="0 0 24 24">
@@ -3045,6 +3109,7 @@
                 />
               </svg>
               Homework
+              <span class="tab-eye-btn" onclick="event.stopPropagation(); toggleTabEye('homework')" title="Toggle visibility"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg></span>
             </button>
             <button class="nav-tab" data-tab="planner">
               <svg viewBox="0 0 24 24">
@@ -3055,6 +3120,7 @@
                 />
               </svg>
               Planner
+              <span class="tab-eye-btn" onclick="event.stopPropagation(); toggleTabEye('planner')" title="Toggle visibility"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg></span>
             </button>
             <button class="nav-tab" data-tab="classbook">
               <svg viewBox="0 0 24 24">
@@ -3063,6 +3129,7 @@
                 />
               </svg>
               Class Book
+              <span class="tab-eye-btn" onclick="event.stopPropagation(); toggleTabEye('classbook')" title="Toggle visibility"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg></span>
             </button>
           </div>
         </aside>
@@ -5285,7 +5352,7 @@
         _origLoginSuccess(username, userData);
         if (userData.role === "admin") {
           document.getElementById("timer-widget").classList.add("visible");
-          document.getElementById("tab-settings-row").style.display = "block";
+          document.getElementById("student-nav").classList.add("admin-mode");
         }
       };
 
@@ -6341,84 +6408,86 @@
         );
       }
 
+      var currentTabFilter = "all";
+
       function applyTabVisibility(studentName) {
         var hidden = getHiddenTabs(studentName);
+        var isAdmin = currentUser && currentUser.role === "admin";
         var navTabs = document.querySelectorAll("#student-nav .nav-tab");
+
         navTabs.forEach(function (tab) {
           var tabName = tab.dataset.tab;
-          tab.style.display = hidden.indexOf(tabName) !== -1 ? "none" : "";
+          var isHidden = hidden.indexOf(tabName) !== -1;
+          var eyeBtn = tab.querySelector(".tab-eye-btn");
+
+          if (isAdmin) {
+            // Admin sees all tabs, hidden ones are dimmed
+            tab.classList.toggle("tab-is-hidden", isHidden);
+
+            // Apply filter
+            if (currentTabFilter === "visible") {
+              tab.style.display = isHidden ? "none" : "";
+            } else if (currentTabFilter === "hidden") {
+              tab.style.display = isHidden ? "" : "none";
+            } else {
+              tab.style.display = "";
+            }
+
+            // Update eye icon
+            if (eyeBtn) {
+              eyeBtn.classList.toggle("tab-hidden", isHidden);
+              eyeBtn.title = isHidden ? "Show to student" : "Hide from student";
+              eyeBtn.innerHTML = isHidden
+                ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM22.676 12.553a11.249 11.249 0 0 1-2.631 4.31l-3.099-3.099a5.25 5.25 0 0 0-6.71-6.71L7.759 4.577A11.217 11.217 0 0 1 12 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113Z"/><path d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0 1 15.75 12ZM12.53 15.713l-4.243-4.244a3.75 3.75 0 0 0 4.244 4.243Z"/><path d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 0 0-2.63 4.31c-.12.362-.12.752 0 1.114 1.489 4.467 5.704 7.69 10.675 7.69 1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 0 1 6.75 12Z"/></svg>'
+                : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.224-10.676-7.69a1.762 1.762 0 0 1 0-1.113ZM17.25 12a5.25 5.25 0 1 1-10.5 0 5.25 5.25 0 0 1 10.5 0Z" clip-rule="evenodd"/></svg>';
+            }
+          } else {
+            // Student: hidden tabs are completely invisible
+            tab.style.display = isHidden ? "none" : "";
+            tab.classList.remove("tab-is-hidden");
+            if (eyeBtn) eyeBtn.style.display = "none";
+          }
         });
-        // If the currently active tab is hidden, switch to the first visible one
-        var activeTab = document.querySelector("#student-nav .nav-tab.active");
-        if (activeTab && activeTab.style.display === "none") {
-          var firstVisible = document.querySelector(
-            "#student-nav .nav-tab:not([style*='display: none'])",
-          );
-          if (firstVisible) {
-            document.querySelectorAll(".nav-tab").forEach(function (t) {
-              t.classList.remove("active");
-            });
-            firstVisible.classList.add("active");
-            showPanel(firstVisible.dataset.tab);
+
+        // If the currently active tab is hidden for a student, switch to first visible
+        if (!isAdmin) {
+          var activeTab = document.querySelector("#student-nav .nav-tab.active");
+          if (activeTab && activeTab.style.display === "none") {
+            var firstVisible = document.querySelector(
+              '#student-nav .nav-tab:not([style*="display: none"])',
+            );
+            if (firstVisible) {
+              document.querySelectorAll(".nav-tab").forEach(function (t) {
+                t.classList.remove("active");
+              });
+              firstVisible.classList.add("active");
+              showPanel(firstVisible.dataset.tab);
+            }
           }
         }
       }
 
-      function openTabSettings() {
-        if (!selectedStudent) {
-          alert("Select a student first");
-          return;
-        }
-        var hidden = getHiddenTabs(selectedStudent.name);
-        var html =
-          '<div style="margin-bottom:16px"><p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">Toggle which tabs this student can see.</p>';
-        ALL_TABS.forEach(function (tab) {
-          var isHidden = hidden.indexOf(tab) !== -1;
-          var label = tab.charAt(0).toUpperCase() + tab.slice(1);
-          if (tab === "classlog") label = "Class Log";
-          if (tab === "vocab") label = "Vocab Bank";
-          html +=
-            '<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">' +
-            '<span style="font-size:14px;font-weight:500">' +
-            label +
-            "</span>" +
-            '<label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer">' +
-            '<input type="checkbox" ' +
-            (isHidden ? "" : "checked") +
-            ' data-tab-toggle="' +
-            tab +
-            '" style="opacity:0;width:0;height:0" onchange="toggleTabForStudent(this)">' +
-            '<span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:' +
-            (isHidden ? "var(--bg-tertiary)" : "var(--green)") +
-            ';border-radius:24px;transition:0.3s"></span>' +
-            '<span style="position:absolute;height:18px;width:18px;left:' +
-            (isHidden ? "3px" : "23px") +
-            ';bottom:3px;background:white;border-radius:50%;transition:0.3s"></span>' +
-            "</label></div>";
-        });
-        html += "</div>";
-        openModal("Tab Settings — " + selectedStudent.name, html);
-      }
-
-      function toggleTabForStudent(checkbox) {
+      function toggleTabEye(tabName) {
         if (!selectedStudent) return;
-        var tab = checkbox.getAttribute("data-tab-toggle");
         var hidden = getHiddenTabs(selectedStudent.name);
-        if (checkbox.checked) {
-          hidden = hidden.filter(function (t) {
-            return t !== tab;
-          });
-          checkbox.parentNode.querySelectorAll("span")[0].style.background =
-            "var(--green)";
-          checkbox.parentNode.querySelectorAll("span")[1].style.left = "23px";
+        var idx = hidden.indexOf(tabName);
+        if (idx !== -1) {
+          hidden.splice(idx, 1);
         } else {
-          if (hidden.indexOf(tab) === -1) hidden.push(tab);
-          checkbox.parentNode.querySelectorAll("span")[0].style.background =
-            "var(--bg-tertiary)";
-          checkbox.parentNode.querySelectorAll("span")[1].style.left = "3px";
+          hidden.push(tabName);
         }
         setHiddenTabs(selectedStudent.name, hidden);
         applyTabVisibility(selectedStudent.name);
+      }
+
+      function filterAdminTabs(filter) {
+        currentTabFilter = filter;
+        document.querySelectorAll(".tab-filter-btn").forEach(function (btn) {
+          btn.classList.toggle("active", btn.dataset.filter === filter);
+        });
+        if (selectedStudent) {
+          applyTabVisibility(selectedStudent.name);
+        }
       }
     </script>
   </body>
