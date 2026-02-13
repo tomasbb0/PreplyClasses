@@ -395,6 +395,52 @@
         font-weight: 500;
       }
 
+      /* Trick round styling — no "Simão diz" */
+      .bubble.trick {
+        background: rgba(239, 68, 68, 0.10);
+        border-color: rgba(239, 68, 68, 0.35);
+      }
+      .bubble.trick .bubble-cmd { color: #ef4444; }
+      .bubble-trick-tag {
+        display: none;
+        font-size: 0.7rem; color: #ef4444; font-weight: 700;
+        background: rgba(239,68,68,0.12); border-radius: 6px;
+        padding: 2px 8px; margin-top: 4px;
+      }
+      .bubble.trick .bubble-trick-tag { display: inline-block; }
+
+      /* Road progress */
+      .road-wrap {
+        width: 100%; max-width: 400px; margin: 8px auto 4px;
+        position: relative; height: 38px;
+      }
+      .road {
+        position: absolute; top: 10px; left: 0; right: 0; height: 18px;
+        background: #475569; border-radius: 9px; overflow: hidden;
+      }
+      .road-dashes {
+        position: absolute; top: 50%; left: 0; right: 0;
+        height: 2px; background: repeating-linear-gradient(
+          90deg, #fff 0 8px, transparent 8px 18px
+        ); opacity: 0.4;
+      }
+      .road-fill {
+        position: absolute; top: 0; left: 0; height: 100%;
+        background: linear-gradient(90deg, #34d399, #10b981);
+        border-radius: 9px; transition: width 0.5s ease;
+        width: 0;
+      }
+      .road-car {
+        position: absolute; top: 0; font-size: 24px; line-height: 38px;
+        transition: left 0.5s ease; left: 0;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        z-index: 2;
+      }
+      .road-flag {
+        position: absolute; top: 2px; right: -2px; font-size: 18px;
+        line-height: 38px; z-index: 1;
+      }
+
       .replay-btn {
         position: absolute;
         top: 12px;
@@ -1169,6 +1215,14 @@
           </div>
           <div class="hud-item hud-round">🎯 <span id="round">1/15</span></div>
         </div>
+        <div class="road-wrap">
+          <div class="road">
+            <div class="road-dashes"></div>
+            <div class="road-fill" id="road-fill"></div>
+          </div>
+          <div class="road-car" id="road-car">🚗</div>
+          <div class="road-flag">🏁</div>
+        </div>
         <div class="simon-box" id="simon-box">
           <button class="replay-btn" id="replay-btn" onclick="replay()">
             🔊
@@ -1179,6 +1233,7 @@
             <span class="bubble-prefix" id="b-prefix"></span>
             <span class="bubble-cmd" id="b-cmd">…</span>
             <span class="bubble-en" id="b-en"></span>
+            <span class="bubble-trick-tag">⚠️ Simon didn't say!</span>
           </div>
         </div>
         <div class="actions" id="actions"></div>
@@ -1672,6 +1727,14 @@
         });
       }
 
+      function updRoad() {
+        var pct = Math.min(correct / TOTAL * 100, 100);
+        var fill = document.getElementById("road-fill");
+        var car = document.getElementById("road-car");
+        if (fill) fill.style.width = pct + "%";
+        if (car) car.style.left = "calc(" + pct + "% - 12px)";
+      }
+
       // ======= START =======
       var speechWarmedUp = false;
       function startGame() {
@@ -1692,6 +1755,7 @@
         words = new Set();
         updHUD();
         updCombo();
+        updRoad();
         go("game");
         nextRound();
       }
@@ -1718,6 +1782,8 @@
         var spoken = simonSays ? "Simão diz: " + curCmd.pt : curCmd.pt;
 
         // Update bubble
+        var bub = document.getElementById("bubble");
+        bub.classList.toggle("trick", !simonSays);
         document.getElementById("b-prefix").textContent = simonSays
           ? "Simão diz:"
           : "";
@@ -2057,6 +2123,7 @@
             toast("✅ Correct! +" + bonus, "ok");
           }
           if (streak >= 3) confetti(10);
+          updRoad();
         } else {
           lives--;
           streak = 0;
