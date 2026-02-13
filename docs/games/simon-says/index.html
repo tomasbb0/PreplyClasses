@@ -1452,7 +1452,7 @@
         setTimeout(findPtVoice, 1000);
       }
 
-      function say(text, cb) {
+      function say(text, cb, isSimon, cmdId) {
         lastSpeak = text;
         var wiz = document.getElementById("wizard");
         wiz.classList.add("talk");
@@ -1467,24 +1467,47 @@
         // Safety timeout
         setTimeout(done, 6000);
 
-        // Primary: Google Translate TTS (reliable pt-PT)
-        try {
-          var url =
-            "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=pt-PT&q=" +
-            encodeURIComponent(text);
-          var audio = new Audio(url);
-          audio.onended = done;
-          audio.onerror = function () {
-            console.warn("Google TTS failed, trying speechSynthesis");
-            fallbackSpeak(text, done);
-          };
-          audio.play().catch(function (e) {
-            console.warn("Google TTS play() failed:", e);
-            fallbackSpeak(text, done);
-          });
-          return;
-        } catch (e) {
-          console.warn("Google TTS error:", e);
+        // Use pre-recorded MP3 files
+        if (cmdId) {
+          try {
+            if (isSimon) {
+              // Play "Simão diz" then the command
+              var prefix = new Audio("audio/simao_diz.mp3");
+              prefix.onended = function () {
+                var cmd = new Audio("audio/" + cmdId + ".mp3");
+                cmd.onended = done;
+                cmd.onerror = done;
+                cmd.play().catch(function () {
+                  done();
+                });
+              };
+              prefix.onerror = function () {
+                // If prefix fails, try just the command
+                var cmd = new Audio("audio/" + cmdId + ".mp3");
+                cmd.onended = done;
+                cmd.onerror = done;
+                cmd.play().catch(function () {
+                  done();
+                });
+              };
+              prefix.play().catch(function () {
+                fallbackSpeak(text, done);
+              });
+            } else {
+              // Just the command (trick round, no "Simão diz")
+              var cmd = new Audio("audio/" + cmdId + ".mp3");
+              cmd.onended = done;
+              cmd.onerror = function () {
+                fallbackSpeak(text, done);
+              };
+              cmd.play().catch(function () {
+                fallbackSpeak(text, done);
+              });
+            }
+            return;
+          } catch (e) {
+            console.warn("MP3 playback error:", e);
+          }
         }
 
         // Fallback: Web Speech API
@@ -1512,12 +1535,17 @@
       }
 
       function replay() {
-        if (!lastSpeak) return;
+        if (!curCmd) return;
         var btn = document.getElementById("replay-btn");
         btn.classList.add("on");
-        say(lastSpeak, function () {
-          btn.classList.remove("on");
-        });
+        say(
+          lastSpeak,
+          function () {
+            btn.classList.remove("on");
+          },
+          simonSays,
+          curCmd.id,
+        );
       }
 
       // ======= SOUNDS =======
@@ -1697,7 +1725,7 @@
           curCmd.emoji + " " + curCmd.pt;
         document.getElementById("b-en").textContent = "";
 
-        say(spoken);
+        say(spoken, null, simonSays, curCmd.id);
         buildBtns();
       }
 
