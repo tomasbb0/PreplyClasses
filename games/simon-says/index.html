@@ -1457,49 +1457,58 @@
         var wiz = document.getElementById("wizard");
         wiz.classList.add("talk");
 
-        if (!window.speechSynthesis) {
-          console.warn("No speechSynthesis API");
-          setTimeout(function () {
-            wiz.classList.remove("talk");
-            if (cb) cb();
-          }, 1500);
+        var finished = false;
+        function done() {
+          if (finished) return;
+          finished = true;
+          wiz.classList.remove("talk");
+          if (cb) cb();
+        }
+        // Safety timeout
+        setTimeout(done, 6000);
+
+        // Primary: Google Translate TTS (reliable pt-PT)
+        try {
+          var url =
+            "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=pt-PT&q=" +
+            encodeURIComponent(text);
+          var audio = new Audio(url);
+          audio.onended = done;
+          audio.onerror = function () {
+            console.warn("Google TTS failed, trying speechSynthesis");
+            fallbackSpeak(text, done);
+          };
+          audio.play().catch(function (e) {
+            console.warn("Google TTS play() failed:", e);
+            fallbackSpeak(text, done);
+          });
           return;
+        } catch (e) {
+          console.warn("Google TTS error:", e);
         }
 
-        // Make sure voices are loaded
+        // Fallback: Web Speech API
+        fallbackSpeak(text, done);
+      }
+
+      function fallbackSpeak(text, done) {
+        if (!window.speechSynthesis) {
+          setTimeout(done, 1500);
+          return;
+        }
         if (!voicesReady) findPtVoice();
-
-        // Chrome bug: cancel + immediate speak can fail. 
-        // Also call resume() for browsers that pause synth.
         speechSynthesis.cancel();
-
-        setTimeout(function() {
-          speechSynthesis.resume();
-          var u = new SpeechSynthesisUtterance(text);
-          u.lang = "pt-PT";
-          u.rate = 0.88;
-          u.pitch = 1.05;
-          u.volume = 1;
-          if (ptVoice) u.voice = ptVoice;
-
-          var finished = false;
-          function done() {
-            if (finished) return;
-            finished = true;
-            wiz.classList.remove("talk");
-            if (cb) cb();
-          }
-          u.onend = done;
-          u.onerror = function(e) {
-            console.warn("Speech error:", e);
-            done();
-          };
-          // Safety timeout in case onend never fires
-          setTimeout(done, 5000);
-
-          console.log("Speaking:", text, "Voice:", ptVoice ? ptVoice.name : "default");
-          speechSynthesis.speak(u);
-        }, 100);
+        var u = new SpeechSynthesisUtterance(text);
+        u.lang = "pt-PT";
+        u.rate = 0.88;
+        u.pitch = 1.05;
+        u.volume = 1;
+        if (ptVoice) u.voice = ptVoice;
+        u.onend = done;
+        u.onerror = function () {
+          done();
+        };
+        speechSynthesis.speak(u);
       }
 
       function replay() {
