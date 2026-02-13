@@ -471,6 +471,191 @@
       .act:active {
         transform: scale(0.96);
       }
+      .act-illust {
+        width: 100%;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+      }
+      .act-illust svg {
+        width: 80px;
+        height: 80px;
+      }
+      /* Stick figure base styles */
+      .sf-head {
+        fill: #ffd93d;
+        stroke: #333;
+        stroke-width: 2;
+      }
+      .sf-body,
+      .sf-arm,
+      .sf-leg {
+        stroke: #333;
+        stroke-width: 3;
+        stroke-linecap: round;
+        fill: none;
+      }
+      .sf-eye {
+        fill: #333;
+      }
+      .sf-mouth {
+        stroke: #333;
+        stroke-width: 2;
+        fill: none;
+      }
+      .sf-note {
+        fill: #ff6b6b;
+        font-size: 14px;
+      }
+      .sf-extra {
+        fill: #4fc3f7;
+      }
+
+      /* Action animations */
+      @keyframes sfJump {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+      @keyframes sfClap {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(15deg);
+        }
+      }
+      @keyframes sfClapR {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(-15deg);
+        }
+      }
+      @keyframes sfDance {
+        0%,
+        100% {
+          transform: rotate(-8deg);
+        }
+        50% {
+          transform: rotate(8deg);
+        }
+      }
+      @keyframes sfSpin {
+        from {
+          transform: rotateY(0deg);
+        }
+        to {
+          transform: rotateY(360deg);
+        }
+      }
+      @keyframes sfWave {
+        0%,
+        100% {
+          transform: rotate(-20deg);
+        }
+        50% {
+          transform: rotate(20deg);
+        }
+      }
+      @keyframes sfShake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-3px);
+        }
+        75% {
+          transform: translateX(3px);
+        }
+      }
+      @keyframes sfFloat {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+      @keyframes sfStomp {
+        0%,
+        80% {
+          transform: translateY(0);
+        }
+        90% {
+          transform: translateY(3px);
+        }
+      }
+      @keyframes sfRun {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        50% {
+          transform: translateX(5px);
+        }
+      }
+      @keyframes sfBob {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-3px) scale(1.05);
+        }
+      }
+      @keyframes sfNod {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(10deg);
+        }
+      }
+      @keyframes sfPulse {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      @keyframes sfNoteFloat {
+        0% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-20px);
+          opacity: 0;
+        }
+      }
+      @keyframes sfBlowAir {
+        0% {
+          transform: scaleX(0);
+          opacity: 1;
+        }
+        100% {
+          transform: scaleX(3) translateX(10px);
+          opacity: 0;
+        }
+      }
+
       .act-gif {
         width: 100%;
         height: 80px;
@@ -1488,6 +1673,182 @@
       }
 
       // ======= BUILD BUTTONS =======
+      
+      // SVG stick figure illustrations for each action
+      function makeSVG(id) {
+        // Base stick figure parts
+        var head = '<circle cx="50" cy="22" r="12" class="sf-head"/>';
+        var eyeL = '<circle cx="46" cy="20" r="1.5" class="sf-eye"/>';
+        var eyeR = '<circle cx="54" cy="20" r="1.5" class="sf-eye"/>';
+        var smile = '<path d="M45 26 Q50 31 55 26" class="sf-mouth"/>';
+        var body = '<line x1="50" y1="34" x2="50" y2="65" class="sf-body"/>';
+
+        var svgs = {
+          jump: '<g style="animation:sfJump 0.6s ease infinite">' +
+            head + eyeL + eyeR + smile + body +
+            '<line x1="50" y1="45" x2="30" y2="38" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="70" y2="38" class="sf-arm"/>' +
+            '<line x1="50" y1="65" x2="38" y2="85" class="sf-arm"/>' +
+            '<line x1="50" y1="65" x2="62" y2="85" class="sf-arm"/>' +
+            '<line x1="38" y1="85" x2="45" y2="92" class="sf-leg" style="animation:sfStomp .3s ease infinite"/>' +
+            '</g>',
+          clap: head + eyeL + eyeR + smile + body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<g style="transform-origin:50px 45px;animation:sfClap 0.4s ease infinite"><line x1="50" y1="45" x2="30" y2="40" class="sf-arm"/></g>' +
+            '<g style="transform-origin:50px 45px;animation:sfClapR 0.4s ease infinite"><line x1="50" y1="45" x2="70" y2="40" class="sf-arm"/></g>' +
+            '<text x="50" y="32" text-anchor="middle" style="font-size:8px;animation:sfPulse 0.4s ease infinite" fill="#FF6B6B">👏</text>',
+          dance: '<g style="transform-origin:50px 50px;animation:sfDance 0.6s ease-in-out infinite">' +
+            head + eyeL + eyeR + smile + body +
+            '<line x1="50" y1="45" x2="28" y2="35" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="72" y2="55" class="sf-arm"/>' +
+            '<line x1="50" y1="65" x2="35" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="65" y2="90" class="sf-leg"/>' +
+            '<text x="75" y="30" style="font-size:10px">🎵</text>' +
+            '</g>',
+          sit: head + eyeL + eyeR + smile +
+            '<line x1="50" y1="34" x2="50" y2="55" class="sf-body"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="70" y2="55" class="sf-arm"/>' +
+            '<line x1="50" y1="55" x2="70" y2="55" class="sf-leg"/>' +
+            '<line x1="70" y1="55" x2="70" y2="80" class="sf-leg"/>' +
+            '<line x1="50" y1="55" x2="30" y2="55" class="sf-leg"/>' +
+            '<line x1="30" y1="55" x2="30" y2="80" class="sf-leg"/>' +
+            '<rect x="20" y="50" width="60" height="5" rx="2" fill="#8B5E3C" opacity="0.5"/>',
+          spin: '<g style="transform-origin:50px 50px;animation:sfSpin 1s linear infinite">' +
+            head + eyeL + eyeR + smile + body +
+            '<line x1="50" y1="45" x2="28" y2="50" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="72" y2="50" class="sf-arm"/>' +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '</g>' +
+            '<circle cx="50" cy="50" r="30" fill="none" stroke="#4FC3F7" stroke-width="1" stroke-dasharray="5 5" opacity="0.4"/>',
+          wave: head + eyeL + eyeR + smile + body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<g style="transform-origin:70px 30px;animation:sfWave 0.4s ease-in-out infinite alternate">' +
+            '<line x1="50" y1="45" x2="72" y2="28" class="sf-arm"/>' +
+            '<circle cx="75" cy="22" r="5" fill="#FFD93D" stroke="#333" stroke-width="1"/>' +
+            '</g>',
+          laugh: '<g style="animation:sfShake 0.2s ease infinite">' +
+            '<circle cx="50" cy="22" r="12" class="sf-head"/>' +
+            eyeL + eyeR +
+            '<path d="M42 26 Q50 35 58 26" class="sf-mouth" stroke-width="2.5"/>' +
+            body +
+            '<line x1="50" y1="45" x2="32" y2="50" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="68" y2="42" class="sf-arm"/>' +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<text x="72" y="18" style="font-size:8px">😂</text>' +
+            '</g>',
+          sing: head + eyeL + eyeR +
+            '<ellipse cx="50" cy="27" rx="4" ry="5" fill="#333" opacity="0.6"/>' +
+            body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="72" y2="35" class="sf-arm"/>' +
+            '<circle cx="76" cy="32" r="4" fill="#999"/><line x1="76" y1="36" x2="76" y2="50" stroke="#999" stroke-width="2"/>' +
+            '<text x="30" y="20" class="sf-note" style="animation:sfNoteFloat 1.5s ease infinite">♪</text>' +
+            '<text x="70" y="15" class="sf-note" style="animation:sfNoteFloat 1.5s ease 0.5s infinite">♫</text>',
+          whisper: head + eyeL + eyeR +
+            '<path d="M45 27 Q50 29 55 27" class="sf-mouth"/>' +
+            body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<g style="transform-origin:64px 24px"><line x1="50" y1="45" x2="64" y2="24" class="sf-arm"/></g>' +
+            '<text x="66" y="18" fill="#999" style="font-size:9px;animation:sfPulse 1s ease infinite">🤫</text>',
+          nose: head + eyeL + eyeR + smile + body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<g style="animation:sfNod 0.8s ease infinite"><line x1="50" y1="45" x2="52" y2="27" class="sf-arm"/>' +
+            '<circle cx="50" cy="26" r="3" fill="#FF6B6B" opacity="0.6"/></g>',
+          eyes: head + 
+            '<line x1="43" y1="20" x2="48" y2="20" class="sf-body" stroke-width="2"/>' +
+            '<line x1="52" y1="20" x2="57" y2="20" class="sf-body" stroke-width="2"/>' +
+            smile + body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<g style="animation:sfBob 0.8s ease infinite">' +
+            '<line x1="50" y1="45" x2="38" y2="20" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="62" y2="20" class="sf-arm"/>' +
+            '<circle cx="38" cy="18" r="4" fill="#FFD93D" stroke="#333" stroke-width="1"/>' +
+            '<circle cx="62" cy="18" r="4" fill="#FFD93D" stroke="#333" stroke-width="1"/>' +
+            '</g>',
+          hand: head + eyeL + eyeR + smile + body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<g style="animation:sfBob 0.5s ease infinite">' +
+            '<line x1="50" y1="45" x2="70" y2="10" class="sf-arm"/>' +
+            '<circle cx="72" cy="6" r="5" fill="#FFD93D" stroke="#333" stroke-width="1"/>' +
+            '</g>',
+          stomp: head + eyeL + eyeR +
+            '<path d="M44 27 Q50 24 56 27" class="sf-mouth"/>' +
+            body +
+            '<line x1="50" y1="45" x2="30" y2="42" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="70" y2="42" class="sf-arm"/>' +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<g style="animation:sfStomp 0.3s ease infinite">' +
+            '<line x1="50" y1="65" x2="65" y2="85" class="sf-leg"/>' +
+            '<ellipse cx="68" cy="88" rx="8" ry="3" fill="#FF6B6B" opacity="0.4"/>' +
+            '</g>' +
+            '<text x="50" y="96" text-anchor="middle" fill="#FF6B6B" style="font-size:8px;animation:sfPulse 0.3s ease infinite">💥</text>',
+          fly: '<g style="animation:sfFloat 1.5s ease-in-out infinite">' +
+            head + eyeL + eyeR + smile + body +
+            '<line x1="50" y1="45" x2="18" y2="42" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="82" y2="42" class="sf-arm"/>' +
+            '<line x1="50" y1="65" x2="42" y2="88" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="58" y2="88" class="sf-leg"/>' +
+            '</g>' +
+            '<text x="15" y="55" style="font-size:7px;opacity:0.4">~</text>' +
+            '<text x="80" y="55" style="font-size:7px;opacity:0.4">~</text>',
+          run: '<g style="animation:sfRun 0.3s ease infinite">' +
+            head + eyeL + eyeR + smile + body +
+            '<line x1="50" y1="45" x2="30" y2="40" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="70" y2="55" class="sf-arm"/>' +
+            '<line x1="50" y1="65" x2="30" y2="85" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="68" y2="88" class="sf-leg"/>' +
+            '</g>' +
+            '<text x="20" y="70" style="font-size:8px;opacity:0.3;animation:sfPulse 0.3s ease infinite">💨</text>',
+          stretch: head + eyeL + eyeR + smile +
+            '<line x1="50" y1="34" x2="50" y2="68" class="sf-body"/>' +
+            '<line x1="50" y1="68" x2="38" y2="92" class="sf-leg"/>' +
+            '<line x1="50" y1="68" x2="62" y2="92" class="sf-leg"/>' +
+            '<g style="animation:sfBob 1s ease-in-out infinite">' +
+            '<line x1="50" y1="45" x2="30" y2="12" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="70" y2="12" class="sf-arm"/>' +
+            '</g>',
+          blow: head + eyeL + eyeR +
+            '<ellipse cx="53" cy="27" rx="3" ry="2" fill="none" stroke="#333" stroke-width="1.5"/>' +
+            body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="30" y2="55" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="70" y2="55" class="sf-arm"/>' +
+            '<g style="animation:sfBlowAir 1.5s ease-out infinite">' +
+            '<ellipse cx="62" cy="26" rx="4" ry="3" fill="#4FC3F7" opacity="0.5"/>' +
+            '</g>' +
+            '<g style="animation:sfBlowAir 1.5s ease-out 0.5s infinite">' +
+            '<ellipse cx="65" cy="24" rx="3" ry="2" fill="#4FC3F7" opacity="0.3"/>' +
+            '</g>',
+          nothing: head + eyeL + eyeR +
+            '<path d="M44 27 L56 27" class="sf-mouth"/>' +
+            body +
+            '<line x1="50" y1="65" x2="38" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="65" x2="62" y2="90" class="sf-leg"/>' +
+            '<line x1="50" y1="45" x2="28" y2="38" class="sf-arm"/>' +
+            '<line x1="50" y1="45" x2="72" y2="38" class="sf-arm"/>' +
+            '<text x="50" y="5" text-anchor="middle" style="font-size:8px">🤷</text>',
+        };
+        
+        var svg = svgs[id] || svgs.nothing;
+        return '<div class="act-illust"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' + svg + '</svg></div>';
+      }
+
       function buildBtns() {
         var area = document.getElementById("actions");
         area.innerHTML = "";
@@ -1504,14 +1865,7 @@
           var b = document.createElement("button");
           b.className = "act " + cmd.c;
           b.innerHTML =
-            '<img class="act-gif" src="' +
-            cmd.gif +
-            '" alt="' +
-            cmd.en +
-            "\" onerror=\"this.style.display='none';this.nextElementSibling.style.display='block'\">" +
-            '<span class="act-emoji" style="display:none">' +
-            cmd.emoji +
-            "</span>" +
+            makeSVG(cmd.id) +
             '<span class="act-label">' +
             cmd.en +
             "</span>";
@@ -1523,8 +1877,7 @@
 
         var nb = document.createElement("button");
         nb.className = "act c-red";
-        nb.innerHTML =
-          '<img class="act-gif" src="gifs/nothing.gif" alt="Do nothing" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'"><span class="act-emoji" style="display:none">🚫</span><span class="act-label">Do nothing!</span>';
+        nb.innerHTML = makeSVG("nothing") + '<span class="act-label">Do nothing!</span>';
         nb.onclick = function () {
           answer("nothing");
         };
