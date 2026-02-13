@@ -1238,17 +1238,28 @@
         var voices = speechSynthesis.getVoices();
         if (!voices.length) return;
         voicesReady = true;
-        var best = null, ptPT = null, ptGeneric = null, ptBR = null;
+        var best = null,
+          ptPT = null,
+          ptGeneric = null,
+          ptBR = null;
         for (var i = 0; i < voices.length; i++) {
           var v = voices[i];
           if (v.lang === "pt-PT" || v.lang === "pt_PT") {
-            if (!best && /premium|enhanced|neural|natural|joana|catarina/i.test(v.name)) best = v;
+            if (
+              !best &&
+              /premium|enhanced|neural|natural|joana|catarina/i.test(v.name)
+            )
+              best = v;
             if (!ptPT) ptPT = v;
           } else if (v.lang === "pt" && !ptGeneric) ptGeneric = v;
-          else if ((v.lang === "pt-BR" || v.lang === "pt_BR") && !ptBR) ptBR = v;
+          else if ((v.lang === "pt-BR" || v.lang === "pt_BR") && !ptBR)
+            ptBR = v;
         }
         ptVoice = best || ptPT || ptGeneric || ptBR || null;
-        console.log("Voice:", ptVoice ? ptVoice.name + " " + ptVoice.lang : "none found");
+        console.log(
+          "Voice:",
+          ptVoice ? ptVoice.name + " " + ptVoice.lang : "none found",
+        );
       }
       if (window.speechSynthesis) {
         findPtVoice();
@@ -1263,7 +1274,10 @@
         wiz.classList.add("talk");
 
         if (!window.speechSynthesis) {
-          setTimeout(function() { wiz.classList.remove("talk"); if (cb) cb(); }, 1500);
+          setTimeout(function () {
+            wiz.classList.remove("talk");
+            if (cb) cb();
+          }, 1500);
           return;
         }
 
