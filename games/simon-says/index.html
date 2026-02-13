@@ -85,8 +85,6 @@
         width: 100%;
         max-width: 480px;
         padding: 16px;
-        height: 100vh;
-        max-height: 100dvh;
         display: flex;
         flex-direction: column;
       }
@@ -94,7 +92,6 @@
       /* === Screens === */
       .screen {
         display: none;
-        flex: 1;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -310,7 +307,6 @@
 
       /* === SIMON AREA === */
       .simon-box {
-        flex: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -318,11 +314,10 @@
         background: rgba(26, 17, 40, 0.5);
         border-radius: 20px;
         border: 1px solid rgba(167, 139, 250, 0.08);
-        padding: 20px;
+        padding: 24px 20px;
         margin-bottom: 12px;
         position: relative;
         overflow: hidden;
-        min-height: 0;
       }
       .simon-bg-glow {
         position: absolute;
@@ -1016,29 +1011,36 @@
         }
       }
 
-      // ======= VOICE — Portugal Portuguese =======
+      // ======= VOICE — Portugal Portuguese (pt-PT) =======
       var ptVoice = null;
       function findPtVoice() {
         if (!window.speechSynthesis) return;
         var voices = speechSynthesis.getVoices();
-        // Priority: pt-PT > any pt that's not pt-BR > pt-BR as fallback
-        var ptPT = null,
-          ptAny = null;
+        // Strict priority order:
+        // 1. pt-PT voice with "Joana" (best macOS/iOS pt-PT)
+        // 2. Any pt-PT voice
+        // 3. Generic "pt" (not pt-BR)
+        // 4. pt-BR as last resort
+        var best = null, ptPT = null, ptGeneric = null, ptBR = null;
         for (var i = 0; i < voices.length; i++) {
           var v = voices[i];
-          if (v.lang === "pt-PT") {
-            ptPT = v;
-            break;
+          if (v.lang === "pt-PT" || v.lang === "pt_PT") {
+            if (!best && /joana|luciana|catarina|portugal/i.test(v.name)) best = v;
+            if (!ptPT) ptPT = v;
+          } else if (v.lang === "pt" && !ptGeneric) {
+            ptGeneric = v;
+          } else if ((v.lang === "pt-BR" || v.lang === "pt_BR") && !ptBR) {
+            ptBR = v;
           }
-          if (v.lang.indexOf("pt") === 0 && v.lang !== "pt-BR" && !ptAny)
-            ptAny = v;
-          if (v.lang.indexOf("pt") === 0 && !ptAny) ptAny = v;
         }
-        ptVoice = ptPT || ptAny || null;
+        ptVoice = best || ptPT || ptGeneric || ptBR || null;
+        if (ptVoice) console.log("🗣 Voice:", ptVoice.name, ptVoice.lang);
       }
       if (window.speechSynthesis) {
         speechSynthesis.getVoices();
         speechSynthesis.onvoiceschanged = findPtVoice;
+        setTimeout(findPtVoice, 100);
+        setTimeout(findPtVoice, 500);
         findPtVoice();
       }
 
