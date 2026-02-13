@@ -438,7 +438,7 @@
         flex-shrink: 0;
       }
       .act {
-        padding: 14px 8px;
+        padding: 6px;
         border-radius: 14px;
         border: 2.5px solid transparent;
         font-family: inherit;
@@ -448,7 +448,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 4px;
+        gap: 0;
         position: relative;
         overflow: hidden;
       }
@@ -458,10 +458,11 @@
         inset: 0;
         background: linear-gradient(
           to bottom,
-          rgba(255, 255, 255, 0.1),
+          rgba(255, 255, 255, 0.08),
           transparent
         );
         border-radius: 11px;
+        pointer-events: none;
       }
       .act:hover {
         transform: translateY(-2px);
@@ -471,16 +472,160 @@
         transform: scale(0.96);
       }
       .act-emoji {
-        font-size: 1.6rem;
+        font-size: 2.8rem;
+        padding: 8px 0;
+        display: inline-block;
+      }
+      /* Emoji animations */
+      .anim-jump .act-emoji {
+        animation: emojiJump 0.5s ease infinite;
+      }
+      .anim-clap .act-emoji {
+        animation: emojiClap 0.4s ease infinite;
+      }
+      .anim-dance .act-emoji {
+        animation: emojiDance 0.6s ease-in-out infinite;
+      }
+      .anim-sit .act-emoji {
+        animation: emojiSit 0.8s ease infinite;
+      }
+      .anim-spin .act-emoji {
+        animation: emojiSpin 1s linear infinite;
+      }
+      .anim-wave .act-emoji {
+        animation: emojiWave 0.4s ease-in-out infinite alternate;
+      }
+      .anim-shake .act-emoji {
+        animation: emojiShake 0.3s ease infinite;
+      }
+      .anim-pulse .act-emoji {
+        animation: emojiPulse 0.8s ease-in-out infinite;
+      }
+      .anim-stomp .act-emoji {
+        animation: emojiStomp 0.3s ease infinite;
+      }
+      .anim-fly .act-emoji {
+        animation: emojiFly 1.2s ease-in-out infinite;
+      }
+      .anim-run .act-emoji {
+        animation: emojiRun 0.3s linear infinite;
+      }
+      @keyframes emojiJump {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+      @keyframes emojiClap {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.2);
+        }
+      }
+      @keyframes emojiDance {
+        0% {
+          transform: rotate(-8deg);
+        }
+        50% {
+          transform: rotate(8deg);
+        }
+        100% {
+          transform: rotate(-8deg);
+        }
+      }
+      @keyframes emojiSit {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(6px);
+        }
+      }
+      @keyframes emojiSpin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes emojiWave {
+        from {
+          transform: rotate(-15deg);
+        }
+        to {
+          transform: rotate(15deg);
+        }
+      }
+      @keyframes emojiShake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-4px);
+        }
+        75% {
+          transform: translateX(4px);
+        }
+      }
+      @keyframes emojiPulse {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+        50% {
+          transform: scale(1.15);
+          opacity: 0.85;
+        }
+      }
+      @keyframes emojiStomp {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(4px) scale(1.1);
+        }
+      }
+      @keyframes emojiFly {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        25% {
+          transform: translate(4px, -6px);
+        }
+        75% {
+          transform: translate(-4px, -3px);
+        }
+      }
+      @keyframes emojiRun {
+        0% {
+          transform: translateX(-4px);
+        }
+        50% {
+          transform: translateX(4px);
+        }
+        100% {
+          transform: translateX(-4px);
+        }
       }
       .act-label {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         font-weight: 700;
+        padding: 4px 0 2px;
       }
       .act-hint {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         opacity: 0.6;
         font-weight: 500;
+        padding-bottom: 2px;
       }
       .act.c-green {
         background: #10b981;
@@ -889,32 +1034,77 @@
     <script>
       // ======= DATA =======
       var CMDS = [
-        { id: "jump", pt: "Salta!", en: "Jump!", emoji: "🦘", c: "c-green" },
+        {
+          id: "jump",
+          pt: "Salta!",
+          en: "Jump!",
+          emoji: "🦘",
+          c: "c-green",
+          anim: "anim-jump",
+        },
         {
           id: "clap",
           pt: "Bate palmas!",
           en: "Clap!",
           emoji: "👏",
           c: "c-blue",
+          anim: "anim-clap",
         },
-        { id: "dance", pt: "Dança!", en: "Dance!", emoji: "💃", c: "c-pink" },
+        {
+          id: "dance",
+          pt: "Dança!",
+          en: "Dance!",
+          emoji: "💃",
+          c: "c-pink",
+          anim: "anim-dance",
+        },
         {
           id: "sit",
           pt: "Senta-te!",
           en: "Sit down!",
           emoji: "🪑",
           c: "c-orange",
+          anim: "anim-sit",
         },
-        { id: "spin", pt: "Roda!", en: "Spin!", emoji: "🌀", c: "c-purple" },
-        { id: "wave", pt: "Acena!", en: "Wave!", emoji: "👋", c: "c-teal" },
-        { id: "laugh", pt: "Ri-te!", en: "Laugh!", emoji: "😂", c: "c-orange" },
-        { id: "sing", pt: "Canta!", en: "Sing!", emoji: "🎤", c: "c-pink" },
+        {
+          id: "spin",
+          pt: "Roda!",
+          en: "Spin!",
+          emoji: "🌀",
+          c: "c-purple",
+          anim: "anim-spin",
+        },
+        {
+          id: "wave",
+          pt: "Acena!",
+          en: "Wave!",
+          emoji: "👋",
+          c: "c-teal",
+          anim: "anim-wave",
+        },
+        {
+          id: "laugh",
+          pt: "Ri-te!",
+          en: "Laugh!",
+          emoji: "😂",
+          c: "c-orange",
+          anim: "anim-shake",
+        },
+        {
+          id: "sing",
+          pt: "Canta!",
+          en: "Sing!",
+          emoji: "🎤",
+          c: "c-pink",
+          anim: "anim-pulse",
+        },
         {
           id: "whisper",
           pt: "Sussurra!",
           en: "Whisper!",
           emoji: "🤫",
           c: "c-purple",
+          anim: "anim-pulse",
         },
         {
           id: "nose",
@@ -922,6 +1112,7 @@
           en: "Touch your nose!",
           emoji: "👃",
           c: "c-green",
+          anim: "anim-pulse",
         },
         {
           id: "eyes",
@@ -929,6 +1120,7 @@
           en: "Close your eyes!",
           emoji: "😌",
           c: "c-blue",
+          anim: "anim-pulse",
         },
         {
           id: "hand",
@@ -936,6 +1128,7 @@
           en: "Raise your hand!",
           emoji: "✋",
           c: "c-orange",
+          anim: "anim-wave",
         },
         {
           id: "stomp",
@@ -943,24 +1136,48 @@
           en: "Stomp!",
           emoji: "🦶",
           c: "c-red",
+          anim: "anim-stomp",
         },
-        { id: "fly", pt: "Voa!", en: "Fly!", emoji: "🦅", c: "c-purple" },
+        {
+          id: "fly",
+          pt: "Voa!",
+          en: "Fly!",
+          emoji: "🦅",
+          c: "c-purple",
+          anim: "anim-fly",
+        },
         {
           id: "freeze",
           pt: "Congela!",
           en: "Freeze!",
           emoji: "🧊",
           c: "c-blue",
+          anim: "anim-pulse",
         },
-        { id: "run", pt: "Corre!", en: "Run!", emoji: "🏃", c: "c-green" },
+        {
+          id: "run",
+          pt: "Corre!",
+          en: "Run!",
+          emoji: "🏃",
+          c: "c-green",
+          anim: "anim-run",
+        },
         {
           id: "stretch",
           pt: "Estica-te!",
           en: "Stretch!",
           emoji: "🧘",
           c: "c-pink",
+          anim: "anim-pulse",
         },
-        { id: "blow", pt: "Sopra!", en: "Blow!", emoji: "🌬️", c: "c-teal" },
+        {
+          id: "blow",
+          pt: "Sopra!",
+          en: "Blow!",
+          emoji: "🌬️",
+          c: "c-teal",
+          anim: "anim-fly",
+        },
       ];
 
       // ======= STATE =======
@@ -1020,15 +1237,23 @@
       function findPtVoice() {
         if (!window.speechSynthesis) return;
         var voices = speechSynthesis.getVoices();
-        var best = null, ptPT = null, ptGeneric = null, ptBR = null;
+        var best = null,
+          ptPT = null,
+          ptGeneric = null,
+          ptBR = null;
         for (var i = 0; i < voices.length; i++) {
           var v = voices[i];
           if (v.lang === "pt-PT" || v.lang === "pt_PT") {
             // Prefer premium/enhanced voices
-            if (!best && /premium|enhanced|neural|natural|joana|catarina/i.test(v.name)) best = v;
+            if (
+              !best &&
+              /premium|enhanced|neural|natural|joana|catarina/i.test(v.name)
+            )
+              best = v;
             if (!ptPT) ptPT = v;
           } else if (v.lang === "pt" && !ptGeneric) ptGeneric = v;
-          else if ((v.lang === "pt-BR" || v.lang === "pt_BR") && !ptBR) ptBR = v;
+          else if ((v.lang === "pt-BR" || v.lang === "pt_BR") && !ptBR)
+            ptBR = v;
         }
         ptVoice = best || ptPT || ptGeneric || ptBR || null;
       }
@@ -1046,7 +1271,8 @@
         wiz.classList.add("talk");
         var done = false;
         function finish() {
-          if (done) return; done = true;
+          if (done) return;
+          done = true;
           wiz.classList.remove("talk");
           if (cb) cb();
         }
@@ -1054,18 +1280,20 @@
         // Try Google Translate TTS (natural voice, pt-PT)
         try {
           var encoded = encodeURIComponent(text);
-          var url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-PT&client=tw-ob&q=" + encoded;
+          var url =
+            "https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-PT&client=tw-ob&q=" +
+            encoded;
           var audio = new Audio(url);
           audio.volume = 1;
           audio.onended = finish;
-          audio.onerror = function() {
+          audio.onerror = function () {
             // Fallback to Web Speech API
             sayFallback(text, finish);
           };
-          audio.play().catch(function() {
+          audio.play().catch(function () {
             sayFallback(text, finish);
           });
-        } catch(e) {
+        } catch (e) {
           sayFallback(text, finish);
         }
 
@@ -1074,7 +1302,10 @@
       }
 
       function sayFallback(text, cb) {
-        if (!window.speechSynthesis) { if (cb) cb(); return; }
+        if (!window.speechSynthesis) {
+          if (cb) cb();
+          return;
+        }
         speechSynthesis.cancel();
         var u = new SpeechSynthesisUtterance(text);
         u.lang = "pt-PT";
@@ -1082,8 +1313,12 @@
         u.pitch = 1.05;
         u.volume = 1;
         if (ptVoice) u.voice = ptVoice;
-        u.onend = function() { if (cb) cb(); };
-        u.onerror = function() { if (cb) cb(); };
+        u.onend = function () {
+          if (cb) cb();
+        };
+        u.onerror = function () {
+          if (cb) cb();
+        };
         speechSynthesis.speak(u);
       }
 
@@ -1283,13 +1518,15 @@
 
         opts.forEach(function (cmd) {
           var b = document.createElement("button");
-          b.className = "act " + cmd.c;
+          b.className = "act " + cmd.c + " " + (cmd.anim || "");
           b.innerHTML =
             '<span class="act-emoji">' +
             cmd.emoji +
-            '</span><span class="act-label">' +
+            "</span>" +
+            '<span class="act-label">' +
             cmd.pt +
-            '</span><span class="act-hint">' +
+            "</span>" +
+            '<span class="act-hint">' +
             cmd.en +
             "</span>";
           b.onclick = function () {
