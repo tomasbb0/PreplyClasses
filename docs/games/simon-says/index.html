@@ -1229,96 +1229,67 @@
         }
       }
 
-      // ======= VOICE — Best Portuguese voice =======
-      // Strategy: Use Google Translate TTS for natural-sounding pt-PT voice
-      // Falls back to Web Speech API if audio fails
-
+      // ======= VOICE — Portugal Portuguese =======
       var ptVoice = null;
+      var voicesReady = false;
+
       function findPtVoice() {
         if (!window.speechSynthesis) return;
         var voices = speechSynthesis.getVoices();
-        var best = null,
-          ptPT = null,
-          ptGeneric = null,
-          ptBR = null;
+        if (!voices.length) return;
+        voicesReady = true;
+        var best = null, ptPT = null, ptGeneric = null, ptBR = null;
         for (var i = 0; i < voices.length; i++) {
           var v = voices[i];
           if (v.lang === "pt-PT" || v.lang === "pt_PT") {
-            // Prefer premium/enhanced voices
-            if (
-              !best &&
-              /premium|enhanced|neural|natural|joana|catarina/i.test(v.name)
-            )
-              best = v;
+            if (!best && /premium|enhanced|neural|natural|joana|catarina/i.test(v.name)) best = v;
             if (!ptPT) ptPT = v;
           } else if (v.lang === "pt" && !ptGeneric) ptGeneric = v;
-          else if ((v.lang === "pt-BR" || v.lang === "pt_BR") && !ptBR)
-            ptBR = v;
+          else if ((v.lang === "pt-BR" || v.lang === "pt_BR") && !ptBR) ptBR = v;
         }
         ptVoice = best || ptPT || ptGeneric || ptBR || null;
+        console.log("Voice:", ptVoice ? ptVoice.name + " " + ptVoice.lang : "none found");
       }
       if (window.speechSynthesis) {
-        speechSynthesis.getVoices();
-        speechSynthesis.onvoiceschanged = findPtVoice;
-        setTimeout(findPtVoice, 100);
-        setTimeout(findPtVoice, 500);
         findPtVoice();
+        speechSynthesis.onvoiceschanged = findPtVoice;
+        setTimeout(findPtVoice, 200);
+        setTimeout(findPtVoice, 1000);
       }
 
       function say(text, cb) {
         lastSpeak = text;
         var wiz = document.getElementById("wizard");
         wiz.classList.add("talk");
-        var done = false;
-        function finish() {
-          if (done) return;
-          done = true;
-          wiz.classList.remove("talk");
-          if (cb) cb();
-        }
 
-        // Try Google Translate TTS (natural voice, pt-PT)
-        try {
-          var encoded = encodeURIComponent(text);
-          var url =
-            "https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-PT&client=tw-ob&q=" +
-            encoded;
-          var audio = new Audio(url);
-          audio.volume = 1;
-          audio.onended = finish;
-          audio.onerror = function () {
-            // Fallback to Web Speech API
-            sayFallback(text, finish);
-          };
-          audio.play().catch(function () {
-            sayFallback(text, finish);
-          });
-        } catch (e) {
-          sayFallback(text, finish);
-        }
-
-        // Safety timeout
-        setTimeout(finish, 6000);
-      }
-
-      function sayFallback(text, cb) {
         if (!window.speechSynthesis) {
-          if (cb) cb();
+          setTimeout(function() { wiz.classList.remove("talk"); if (cb) cb(); }, 1500);
           return;
         }
+
+        // Make sure voices are loaded
+        if (!voicesReady) findPtVoice();
+
         speechSynthesis.cancel();
         var u = new SpeechSynthesisUtterance(text);
         u.lang = "pt-PT";
-        u.rate = 0.85;
+        u.rate = 0.88;
         u.pitch = 1.05;
         u.volume = 1;
         if (ptVoice) u.voice = ptVoice;
-        u.onend = function () {
+
+        var finished = false;
+        function done() {
+          if (finished) return;
+          finished = true;
+          wiz.classList.remove("talk");
           if (cb) cb();
-        };
-        u.onerror = function () {
-          if (cb) cb();
-        };
+        }
+        u.onend = done;
+        u.onerror = done;
+        // Safety timeout in case onend never fires
+        setTimeout(done, 5000);
+
         speechSynthesis.speak(u);
       }
 
